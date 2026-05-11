@@ -4,7 +4,7 @@ return (
   <form className="w-full max-w-md rounded-2xl bg-background p-8 shadow-lg">
     <div className="space-y-5">
       <div>
-        <label htmlFor="femail" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+        <label htmlFor="femail" className="block text-sm font-medium text-text dark:text-text-muted">
           Email
         </label>
         <input
@@ -13,7 +13,7 @@ return (
           type="email"
           autoComplete="email"
           required
-          className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
+          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
           placeholder="tu@email.com"
         />
       </div>
@@ -28,14 +28,14 @@ return (
           type="password"
           autoComplete="current-password"
           required
-          className="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-gray-900 placeholder-gray-400 transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-white dark:placeholder-gray-500 dark:focus:border-blue-400 dark:focus:ring-blue-400/20"
+          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
           placeholder="••••••••"
         />
       </div>
 
       <button
         type="submit"
-        className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-800 dark:focus:ring-offset-gray-900"
+        className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-background transition-colors hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-offset-2 active:bg-accent dark:focus:ring-text"
       >
         Iniciar sesión
       </button>

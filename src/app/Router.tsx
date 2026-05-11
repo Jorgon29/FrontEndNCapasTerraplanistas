@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -18,6 +19,9 @@ export const router = createBrowserRouter([
       {
         path: "/auth/login", element: <LoginPage />
       },
+      {
+        path: "/auth/register", element: <RegisterPage />
+      }
     ],
   },
   {
