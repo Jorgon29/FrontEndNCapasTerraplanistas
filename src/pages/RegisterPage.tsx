@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { DayPicker } from "@daypicker/react";
 import "@daypicker/react/style.css";
+import { Link } from "react-router";
 
 function RegisterPage() {
 
@@ -20,7 +21,7 @@ function RegisterPage() {
             type="email"
             autoComplete="email"
             required
-            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
             placeholder="tu@email.com"
           />
         </div>
@@ -35,7 +36,7 @@ function RegisterPage() {
               name="ffirstname"
               type="text"
               required
-              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
               placeholder="primer nombre"
             />
           </div>
@@ -48,7 +49,7 @@ function RegisterPage() {
               id="fsecondname"
               name="fsecondname"
               type="text"
-              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
               placeholder="segundo nombre"
             />
           </div>
@@ -64,7 +65,7 @@ function RegisterPage() {
               name="ffirstsurname"
               type="text"
               required
-              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
               placeholder="primer apellido"
             />
           </div>
@@ -77,10 +78,37 @@ function RegisterPage() {
               id="fsecondsurname"
               name="fsecondsurname"
               type="text"
-              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+              className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
               placeholder="segundo apellido"
             />
           </div>
+        </div>
+
+        <div>
+          <label htmlFor="fdui" className="block text-sm font-medium text-text dark:text-text-muted">
+            DUI
+          </label>
+          <input
+            id="fdui"
+            name="dui"
+            type="dui"
+            required
+            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+            placeholder="00000000-0"
+          />
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <label className="text-text dark:text-text ">Fecha de nacimiento</label>
+          <DayPicker
+            animate
+            mode="single"
+            selected={selected}
+            onSelect={setSelected}
+            defaultMonth={new Date(1999, 12)}
+            fixedWeeks
+            className="flex-1"
+          />
         </div>
 
         <div>
@@ -93,7 +121,7 @@ function RegisterPage() {
             type="password"
             autoComplete="current-password"
             required
-            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
             placeholder="••••••••"
           />
         </div>
@@ -108,22 +136,23 @@ function RegisterPage() {
             type="password"
             autoComplete="current-password"
             required
-            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+            className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
             placeholder="••••••••"
           />
         </div>
 
-        <div className="flex flex-col items-center justify-center">
-          <label className="text-text dark:text-text ">Fecha de nacimiento</label>
-          <DayPicker
-            animate
-            mode="single"
-            selected={selected}
-            onSelect={setSelected}
-            defaultMonth={ new Date(1999, 12) }
-            fixedWeeks
-            className="flex-1"
+        <div className="flex flex-row flex-wrap gap-x-4">
+          <input 
+            id="fprivacy"
+            name="fprivacy"
+            type="checkbox"
+            required
+            className="accent-primary flex-1 mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
           />
+          <label className="flex-1 block text-sm font-medium text-text dark:text-text">
+            He leído y acepto el <Link to={"/privacy"} className="text-accent"> aviso de privacidad</Link> de Telemedicina
+            
+          </label>
         </div>
 
         <button

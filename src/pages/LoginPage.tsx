@@ -13,7 +13,7 @@ return (
           type="email"
           autoComplete="email"
           required
-          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
           placeholder="tu@email.com"
         />
       </div>
@@ -28,7 +28,7 @@ return (
           type="password"
           autoComplete="current-password"
           required
-          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-surface-alt placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
+          className="mt-1 block w-full rounded-lg border border-primary-light bg-background px-4 py-2.5 text-text placeholder-text-muted transition-colors focus:border-accent focus:ring-2 focus:ring-accent-dark focus:outline-none dark:border-text-muted dark:bg-accent-dark dark:text-text dark:placeholder-text-muted dark:focus:border-accent-light dark:focus:ring-accent-dark"
           placeholder="••••••••"
         />
       </div>

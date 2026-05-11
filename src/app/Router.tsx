@@ -3,6 +3,7 @@ import { Suspense, lazy } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
+import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -25,10 +26,10 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    element: <></>,
+    element: <PrivacyPolicyPage />,
     children: [
       {
-        path: "/login"
+        path: "/privacy", element:<></>
       },
     ],
   },
