@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 import { Logo } from "./NavBar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-regular-svg-icons";
 
 export function CtaSection() {
   return (
@@ -14,10 +16,10 @@ export function CtaSection() {
         Regístrate ahora y accede a una consulta gratuita con cualquiera de nuestros médicos generales.
       </p>
       <Link
-        to="/register"
+        to="/auth/register"
         className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-base font-medium text-white transition-all hover:-translate-y-px hover:bg-primary-dark"
       >
-        👤 Crear cuenta gratis
+        <FontAwesomeIcon icon={faCircleUser}/> Crear cuenta gratis
       </Link>
     </section>
   );
