@@ -11,10 +11,10 @@ function RegisterPage(){
         <FormCard>
             <FormField id="email" label="Email" type="email" required placeholder="tu@email.com" autoComplete="email"/>
             <div className="flex flex-row flex-wrap gap-x-4">
-                <FormField id="firstname" label="1er nombre" required />
-                <FormField id="secondname" label="2do nombre"/>
-                <FormField id="firstsurname" label="1er apellido" required/>
-                <FormField id="secondsurname" label="2do apellido"/>
+                <FormField id="firstname" label="1er nombre" required className="flex-1" />
+                <FormField id="secondname" label="2do nombre" className="flex-1"/>
+                <FormField id="firstsurname" label="1er apellido" required className="flex-1"/>
+                <FormField id="secondsurname" label="2do apellido" className="flex-1"/>
             </div>
             <FormField id="dui" label="dui" required/>
             <FormDatePicker selected={birthdate} setSelected={setBirthdate} defaultDate={new Date(1999, 12)} label="Fecha de nacimiento" />
