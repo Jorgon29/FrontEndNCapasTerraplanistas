@@ -4,6 +4,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
+import LandingPage from "@/pages/LandingPage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
         path: "/privacy", element:<></>
       },
     ],
+  },
+  {
+    path: "/",
+    element: <LandingPage />
   },
   {
     path: "*",

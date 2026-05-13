@@ -1,0 +1,1 @@
+export { CtaSection as default } from "./Footer";
