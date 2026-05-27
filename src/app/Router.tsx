@@ -5,6 +5,8 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import LandingPage from "@/pages/LandingPage";
+import SearchDoctor from "@/pages/SearchDoctorPage";
+import DoctorAppointmentsPage from "@/pages/DoctorAppointmentsPage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -41,5 +43,13 @@ export const router = createBrowserRouter([
   {
     path: "*",
     element: <h1>Not found</h1>,
+  },
+  {
+    path: "/search",
+    element: <SearchDoctor/>
+  },
+  {
+    path: "/doctor/appointment",
+    element: <DoctorAppointmentsPage/>
   },
 ]);

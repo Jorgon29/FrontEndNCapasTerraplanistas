@@ -8,6 +8,8 @@ export default function Navbar() {
         <li><a href="#features" className="text-sm text-text-muted transition-colors hover:text-primary">Especialidades</a></li>
         <li><a href="#how" className="text-sm text-text-muted transition-colors hover:text-primary">Cómo funciona</a></li>
         <li><a href="#about" className="text-sm text-text-muted transition-colors hover:text-primary">Sobre nosotros</a></li>
+        <li><a href="/search" className="text-sm text-text-muted transition-colors hover:text-primary">Encuentra a tu doctor de preferencia</a></li>
+
         <li>
           <Link
             to="/auth/register"
