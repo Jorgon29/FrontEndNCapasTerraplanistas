@@ -22,7 +22,7 @@ export default function HowItWorks() {
           En cuatro pasos simples
         </h2>
 
-        <div className="grid grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {STEPS.map((step, i) => (
             <div key={step.number} className="relative text-center">
               {i < STEPS.length - 1 && (

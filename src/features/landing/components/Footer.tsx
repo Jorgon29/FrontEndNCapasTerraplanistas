@@ -27,7 +27,7 @@ export function CtaSection() {
 
 export default function Footer() {
   return (
-    <footer className="flex items-center justify-between border-t border-surface-alt bg-surface px-10 py-6">
+    <footer className="flex items-center justify-between border-t border-surface-alt bg-surface px-10 py-6 flex-wrap">
       <Logo />
       <p className="text-sm text-text-muted">© 2025 TeleMédica — Proyecto universitario</p>
       <ul className="flex gap-6 list-none">

@@ -40,11 +40,10 @@ function BookingCard() {
             <button
               key={slot}
               onClick={() => setSelected(slot)}
-              className={`rounded-lg border py-2 text-xs font-medium transition-colors ${
-                selected === slot
+              className={`rounded-lg border py-2 text-xs font-medium transition-colors ${selected === slot
                   ? "border-primary bg-primary text-white"
                   : "border-surface-alt bg-background text-accent hover:border-primary hover:bg-primary hover:text-white"
-              }`}
+                }`}
             >
               {slot}
             </button>
@@ -60,7 +59,7 @@ function BookingCard() {
       </div>
 
       <span className="absolute -bottom-2 -left-4 flex items-center gap-1.5 rounded-full border border-surface-alt bg-surface px-3 py-1.5 text-xs font-medium text-text shadow-sm">
-        <FontAwesomeIcon icon={faLock}/> Cifrado extremo a extremo
+        <FontAwesomeIcon icon={faLock} /> Cifrado extremo a extremo
       </span>
     </div>
   );
@@ -68,7 +67,7 @@ function BookingCard() {
 
 export default function Hero() {
   return (
-    <section className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-12 px-10 pb-16 pt-20">
+    <section className="mx-auto grid grid-cols-1 max-w-6xl md:grid-cols-2 items-center gap-12 px-10 pb-16 pt-20">
       {/* left copy */}
       <div>
         <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-surface-alt px-3 py-1 text-xs font-medium uppercase tracking-wider text-accent">
@@ -88,7 +87,7 @@ export default function Hero() {
             to="/auth/register"
             className="inline-flex items-center gap-2 rounded-xl bg-primary px-7 py-3 text-sm font-medium text-white transition-all hover:-translate-y-px hover:bg-primary-dark"
           >
-            <FontAwesomeIcon icon={faCalendar}/> Agendar consulta
+            <FontAwesomeIcon icon={faCalendar} /> Agendar consulta
           </Link>
           <a href="#features" className="group inline-flex items-center gap-1 text-sm font-medium text-primary transition-all">
             Ver especialidades
@@ -97,7 +96,9 @@ export default function Hero() {
         </div>
       </div>
 
-      <BookingCard />
+      <div className="hidden md:block">
+        <BookingCard />
+      </div>
     </section>
   );
 }

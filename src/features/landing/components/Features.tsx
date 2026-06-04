@@ -10,12 +10,12 @@ interface Feature {
 }
 
 const FEATURES: Feature[] = [
-  { icon: faFilm, title: "Videoconsultas HD",       description: "Consultas por video de alta calidad con tu médico desde cualquier dispositivo." },
-  { icon: faClock, title: "Disponibilidad 24/7",     description: "Accede a médicos de guardia en cualquier momento." },
-  { icon: faFile, title: "Recetas digitales",       description: "Recibe tus recetas y órdenes de laboratorio de forma digital e inmediata." },
-  { icon: faLock, title: "Privacidad garantizada",  description: "Tus datos médicos protegidos con cifrado de nivel bancario en todo momento." },
+  { icon: faFilm, title: "Videoconsultas HD", description: "Consultas por video de alta calidad con tu médico desde cualquier dispositivo." },
+  { icon: faClock, title: "Disponibilidad 24/7", description: "Accede a médicos de guardia en cualquier momento." },
+  { icon: faFile, title: "Recetas digitales", description: "Recibe tus recetas y órdenes de laboratorio de forma digital e inmediata." },
+  { icon: faLock, title: "Privacidad garantizada", description: "Tus datos médicos protegidos con cifrado de nivel bancario en todo momento." },
   { icon: faStethoscope, title: "Especialistas verificados", description: "Todos nuestros médicos están certificados y validados por el colegio médico." },
-  { icon: faClipboard, title: "Historial clínico",       description: "Accede a tu historial completo de consultas y diagnósticos en un solo lugar." },
+  { icon: faClipboard, title: "Historial clínico", description: "Accede a tu historial completo de consultas y diagnósticos en un solo lugar." },
 ];
 
 export default function Features() {
@@ -28,7 +28,7 @@ export default function Features() {
         Salud pensada<br />para tu vida
       </h2>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {FEATURES.map((f) => (
           <div
             key={f.title}
@@ -42,6 +42,7 @@ export default function Features() {
           </div>
         ))}
       </div>
+
     </section>
   );
 }
