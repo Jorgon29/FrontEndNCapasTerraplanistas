@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const BASE_URL = process.env.BUN_PUBLIC_API_URL || 'http://localhost:3000';
+const BASE_URL = process.env.BUN_PUBLIC_API_URL || 'http://localhost:8080';
 
 export function useFormSubmit<TData, TResponse = any>() {
   const [isLoading, setIsLoading] = useState(false);
