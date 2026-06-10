@@ -10,7 +10,7 @@ export default function DoctorList({
 }: DoctorListProps) {
   if (doctors.length === 0) {
     return (
-      <p className="text-center text-gray-500 mt-6">
+      <p className="text-center text-text-muted mt-6">
         No se encontraron doctores
       </p>
     );

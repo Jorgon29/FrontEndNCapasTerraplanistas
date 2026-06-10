@@ -10,7 +10,7 @@ export default function DoctorCard({
   return (
     <div
       className="
-        bg-white
+        bg-background
         rounded-2xl
         shadow-md
         p-5
@@ -22,13 +22,13 @@ export default function DoctorCard({
             {doctor.first_name} {doctor.last_name}
           </h2>
 
-          <p className="text-gray-500">
+          <p className="text-text-muted">
             Licencia:
             {" "}
             {doctor.professional_license_number}
           </p>
 
-          <p className="text-blue-600 font-semibold mt-2">
+          <p className="text-primary font-semibold mt-2">
             ${doctor.fee_per_hour}/hora
           </p>
         </div>
@@ -39,8 +39,8 @@ export default function DoctorCard({
           <span
             key={specialty.id}
             className="
-              bg-blue-100
-              text-blue-700
+              bg-background
+              text-primary-dark
               px-3
               py-1
               rounded-full
