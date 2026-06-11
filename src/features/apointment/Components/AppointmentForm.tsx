@@ -66,7 +66,7 @@ export default function AppointmentForm({
     <form
       onSubmit={handleSubmit}
       className="
-        bg-white
+        bg-background
         rounded-2xl
         shadow-md
         p-6
@@ -75,12 +75,12 @@ export default function AppointmentForm({
       "
     >
       <h2 className="text-2xl font-bold">
-        Create Appointment
+        Agendar cita
       </h2>
 
       <input
         type="text"
-        placeholder="Patient Name"
+        placeholder="Nombre paciente"
         value={patientName}
         onChange={(e) =>
           setPatientName(
@@ -121,7 +121,7 @@ export default function AppointmentForm({
       />
 
       <textarea
-        placeholder="Notes"
+        placeholder="Notas"
         value={notes}
         onChange={(e) =>
           setNotes(e.target.value)
@@ -137,13 +137,13 @@ export default function AppointmentForm({
       <button
         type="submit"
         className="
-          bg-blue-600
-          text-white
+          bg-primary
+          text-background
           rounded-xl
           p-3
         "
       >
-        Save Appointment
+        Guardar cita
       </button>
     </form>
   );

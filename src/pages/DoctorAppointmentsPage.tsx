@@ -5,13 +5,13 @@ import type { Appointment } from "@/features/utils/Appointment";
 import { appointments as initialAppointments } 
 from "@/features/utils/Appointment"
 
-import AppointmentForm from "@/features/Apointment/Components/AppointmentFomr";
+import AppointmentForm from "@/features/apointment/Components/AppointmentForm";
 
-import AppointmentList from "@/features/Apointment/Components/AppointmentList";
+import AppointmentList from "@/features/apointment/Components/AppointmentList";
 
-import AppointmentCalendar from "@/features/Apointment/Components/AppointmentCalendar";
+import AppointmentCalendar from "@/features/apointment/Components/AppointmentCalendar";
 
-import VideoCallModal from "@/features/Apointment/VideoCallModal";
+import VideoCallModal from "@/features/apointment/VideoCallModal";
 
 export default function DoctorAppointmentsPage() {
   const [appointments, setAppointments] =

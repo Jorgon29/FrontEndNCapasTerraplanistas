@@ -19,7 +19,7 @@ export default function AppointmentCard({
   return (
     <div
       className="
-        bg-white
+        bg-background
         rounded-2xl
         shadow-md
         p-5
@@ -41,8 +41,8 @@ export default function AppointmentCard({
 
         <span
           className="
-            bg-blue-100
-            text-blue-700
+            bg-accent-light
+            text-primary-dark
             px-3
             py-1
             rounded-full
@@ -79,9 +79,9 @@ export default function AppointmentCard({
       <button
         onClick={onJoin}
         className="
-          bg-blue-600
-          hover:bg-blue-700
-          text-white
+          bg-primary
+          hover:bg-primary-dark
+          text-background
           rounded-xl
           p-3
           flex
@@ -93,7 +93,7 @@ export default function AppointmentCard({
       >
         <Video size={18} />
 
-        Join Call
+        Unirse a la llamada
       </button>
     </div>
   );

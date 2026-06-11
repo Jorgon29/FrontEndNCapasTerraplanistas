@@ -2,7 +2,6 @@ import type { Appointment } from "../utils/Appointment";
 
 interface VideoCallModalProps {
   appointment: Appointment | null;
-
   onClose: () => void;
 }
 
@@ -34,14 +33,14 @@ export default function VideoCallModal({
       >
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold">
-            Video Call
+            Videollamada
           </h2>
 
           <button
             onClick={onClose}
             className="text-red-500"
           >
-            End Call
+            Terminar llamada
           </button>
         </div>
 
@@ -58,19 +57,19 @@ export default function VideoCallModal({
             text-3xl
           "
         >
-          Simulated Video Call
+          Videollamada simulada
         </div>
 
         <div className="mt-4">
           <p>
-            Meeting Link:
+            Enlace de reunión
           </p>
 
           <a
             href={
               appointment.meeting_link
             }
-            className="text-blue-600"
+            className="text-primary"
           >
             {appointment.meeting_link}
           </a>

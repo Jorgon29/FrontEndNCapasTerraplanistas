@@ -58,7 +58,7 @@ export default function AppointmentCalendar({
   return (
     <div
       className="
-        bg-white
+        bg-background
         p-4
         rounded-2xl
         shadow-md

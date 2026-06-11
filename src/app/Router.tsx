@@ -7,6 +7,7 @@ import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import LandingPage from "@/pages/LandingPage";
 import SearchDoctor from "@/pages/SearchDoctorPage";
 import DoctorAppointmentsPage from "@/pages/DoctorAppointmentsPage";
+import DoctorSchedulePage from "@/pages/DoctoSchedulePage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
     element: <PrivacyPolicyPage />,
     children: [
       {
-        path: "/privacy", element:<></>
+        path: "/privacy", element: <></>
       },
     ],
   },
@@ -46,10 +47,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "/search",
-    element: <SearchDoctor/>
+    element: <SearchDoctor />
   },
   {
     path: "/doctor/appointment",
-    element: <DoctorAppointmentsPage/>
+    element: <DoctorAppointmentsPage />
   },
+  {
+    path: "/doctor/schedule/:uuid",
+    element: <DoctorSchedulePage />
+  }
 ]);
