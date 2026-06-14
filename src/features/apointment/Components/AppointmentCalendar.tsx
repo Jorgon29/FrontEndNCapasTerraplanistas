@@ -2,6 +2,7 @@ import {
   Calendar,
   dateFnsLocalizer,
   Views,
+  type View,
 } from "react-big-calendar";
 
 
@@ -16,6 +17,7 @@ import { enUS } from "date-fns/locale";
 
 import type { Appointment } from "@/features/utils/Appointment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useState } from "react";
 
 const locales = {
   "en-US": enUS,
@@ -37,6 +39,10 @@ interface AppointmentCalendarProps {
 export default function AppointmentCalendar({
   appointments,
 }: AppointmentCalendarProps) {
+
+  const [currentView, setCurrentView] = useState<View>(Views.MONTH);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   const events = appointments.map(
     (appointment) => ({
       title:
@@ -50,7 +56,7 @@ export default function AppointmentCalendar({
         new Date(
           appointment.expected_at
         ).getTime() +
-          60 * 60 * 1000
+        60 * 60 * 1000
       ),
     })
   );
@@ -91,6 +97,11 @@ export default function AppointmentCalendar({
         onSelectSlot={(slotInfo) => {
           console.log(slotInfo);
         }}
+
+        view={currentView}
+        date={currentDate}
+        onView={(view) => setCurrentView(view)}
+        onNavigate={(date) => setCurrentDate(date)}
       />
     </div>
   );

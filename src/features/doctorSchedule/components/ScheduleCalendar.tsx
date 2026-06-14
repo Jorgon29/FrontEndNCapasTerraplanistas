@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar";
+import { Calendar, dateFnsLocalizer, Views, type View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
-import { enUS } from "date-fns/locale";
+import { enUS } from "date-fns/locale/en-US";
 import type { Appointment } from "@/features/utils/Appointment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import ConsultationModal from "./ConsultationModal";
 import ConsultationModalV2 from "./ConsultationModalV2";
+import BASE_URL from "@/config/config";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({
@@ -17,8 +16,6 @@ const localizer = dateFnsLocalizer({
   getDay,
   locales,
 });
-
-const BASE_URL = process.env.BUN_PUBLIC_API_URL || 'http://localhost:8080';
 
 const DUMMY_APPOINTMENTS: Appointment[] = [
   {
@@ -54,6 +51,8 @@ function ScheduleCalendar({ doctorUuid }: ScheduleCalendarProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isUsingMock, setIsUsingMock] = useState<boolean>(false);
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
+  const [currentView, setCurrentView] = useState<View>(Views.MONTH);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -95,7 +94,7 @@ function ScheduleCalendar({ doctorUuid }: ScheduleCalendarProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-[700px] items-center justify-center rounded-2xl bg-background p-4 shadow-md text-text">
+      <div className="bg-background p-4 rounded-2xl shadow-md overflow-visible" style={{ height: "700px" }}>
         <div className="flex flex-col items-center space-y-2">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
           <p className="text-sm font-medium text-text">Verificando servidor de datos...</p>
@@ -115,21 +114,20 @@ function ScheduleCalendar({ doctorUuid }: ScheduleCalendarProps) {
       <div className="bg-background p-4 rounded-2xl shadow-md" style={{ height: "700px" }}>
         <Calendar
           localizer={localizer}
-
           events={events}
-
           startAccessor="start"
-
           endAccessor="end"
-
           toolbar={true}
-
+          defaultView={Views.MONTH}
+          defaultDate={new Date()}
           views={[Views.MONTH, Views.WEEK, Views.DAY, Views.AGENDA]}
-
           popup
-
           selectable
           onSelectEvent={(event) => setSelectedAppointment(event.resource)}
+          view={currentView}
+          date={currentDate}
+          onView={(view) => setCurrentView(view)}
+          onNavigate={(date) => setCurrentDate(date)}
         />
       </div>
 

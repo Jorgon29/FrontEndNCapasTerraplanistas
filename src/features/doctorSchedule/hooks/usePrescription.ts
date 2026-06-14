@@ -4,29 +4,27 @@ import { useState } from "react";
 import BASE_URL from "@/config/config";
 
 export function usePrescription(appointment: Appointment) {
-  const { setMessage } = useConsultation();
-  const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({
-    medicineId: "",
-    dosageInstructions: "",
-    maxUsages: 3,
-  });
+    const { setMessage } = useConsultation();
+    const [submitting, setSubmitting] = useState(false);
+    const [form, setForm] = useState({
+        medicines: [{ medicineId: "", medicineName: "", maxUsages: 3 }
+        ],
+        instructions: ""
+    });
 
-      const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSubmitting(true);
         setMessage(null);
 
         const payload = {
             appointment: { id: appointment.id },
-            medicine: { id: Number(form.medicineId) },
-            medicineSnapshot: { name: "Mock Medicine Name", category: "General" },
-            dosageInstructions: form.dosageInstructions,
-            maxUsages: form.maxUsages,
+            medicines: form.medicines,
             createdBy: appointment.employee_id,
-            digitalSignature: `SIG-${Date.now()}-${appointment.employee_id}`,
-            //lo que haga falta
-        };
+            instructions: form.instructions,
+            digitalSignature: `SIG-${Date.now()}-${appointment.employee_id}`
+
+        }
 
         try {
             const response = await fetch(`${BASE_URL}/api/prescriptions`, {
@@ -44,5 +42,17 @@ export function usePrescription(appointment: Appointment) {
         }
     };
 
-      return { form, setForm, submitting, handleSubmit };
+    const addMedicineRow = () =>
+        setForm(f => ({ ...f, medicines: [...f.medicines, { medicineId: "", medicineName: "", maxUsages: 3 }] }));
+
+    const removeMedicineRow = (index: number) =>
+        setForm(f => ({ ...f, medicines: f.medicines.filter((_, i) => i !== index) }));
+
+    const updateMedicineRow = (index: number, patch: Partial<typeof form.medicines[0]>) =>
+        setForm(f => ({
+            ...f,
+            medicines: f.medicines.map((row, i) => i === index ? { ...row, ...patch } : row),
+        }));
+
+    return { form, setForm, submitting, handleSubmit, addMedicineRow, removeMedicineRow, updateMedicineRow };
 }

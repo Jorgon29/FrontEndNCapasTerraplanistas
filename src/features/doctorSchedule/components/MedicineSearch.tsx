@@ -15,45 +15,52 @@ const MOCK_MEDICINES: Medicine[] = [
     { id: "105", name: "Losartán 500mg (Tableta)", category: "Cardio" },
 ];
 
-function MedicineSearch() {
+interface MedicineSearchProps {
+    onSelect: (medicine: Medicine) => void;
+    initialValue?: string;
+}
 
-    const [searchTerm, setSearchTerm] = useState("");
+function MedicineSearch({ onSelect, initialValue = "" }: MedicineSearchProps) {
+    const [searchTerm, setSearchTerm] = useState(initialValue);
     const [medicineResults, setMedicineResults] = useState<Medicine[]>([]);
     const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
     const [showDropdown, setShowDropdown] = useState(false);
 
-        useEffect(() => {
-            if (!searchTerm.trim()) {
-                setMedicineResults([]);
-                return;
-            }
-    
-            if (selectedMedicine && searchTerm === selectedMedicine.name) return;
-    
-            const delaySearch = setTimeout(async () => {
-                try {
-                    const response = await fetch(`${BASE_URL}/api/medicines?search=${encodeURIComponent(searchTerm)}`);
-                    if (!response.ok) throw new Error();
-    
-                    const data = await response.json();
-                    setMedicineResults(data);
-                } catch (err) {
-                    const filteredMocks = MOCK_MEDICINES.filter((med) =>
+    useEffect(() => {
+        if (!searchTerm.trim()) {
+            setMedicineResults([]);
+            return;
+        }
+
+        if (selectedMedicine && searchTerm === selectedMedicine.name) return;
+
+        const delaySearch = setTimeout(async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/api/medicines?search=${encodeURIComponent(searchTerm)}`);
+                if (!response.ok) throw new Error();
+                const data = await response.json();
+                setMedicineResults(data);
+            } catch {
+                setMedicineResults(
+                    MOCK_MEDICINES.filter((med) =>
                         med.name.toLowerCase().includes(searchTerm.toLowerCase())
-                    );
-                    setMedicineResults(filteredMocks);
-                }
-            }, 300);
-    
-            return () => clearTimeout(delaySearch);
-        }, [searchTerm, selectedMedicine]);
+                    )
+                );
+            }
+        }, 300);
+
+        return () => clearTimeout(delaySearch);
+    }, [searchTerm, selectedMedicine]);
+
+    const handleSelect = (med: Medicine) => {
+        setSelectedMedicine(med);
+        setSearchTerm(med.name);
+        setShowDropdown(false);
+        onSelect(med);
+    };
 
     return (
-        <div className="col-span-2 relative">
-            <label className="block text-xs font-bold uppercase tracking-wider mb-1 text-text/70">
-                Medicamento
-            </label>
-
+        <div className="relative">
             <input
                 required
                 type="text"
@@ -77,11 +84,7 @@ function MedicineSearch() {
                         <li
                             key={med.id}
                             className="p-2.5 text-sm hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer flex justify-between items-center"
-                            onMouseDown={() => {
-                                setSelectedMedicine(med);
-                                setSearchTerm(med.name);
-                                setShowDropdown(false);
-                            }}
+                            onMouseDown={() => handleSelect(med)}
                         >
                             <span className="font-medium">{med.name}</span>
                             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-wide">
