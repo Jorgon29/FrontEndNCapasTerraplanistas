@@ -14,7 +14,7 @@ export default function ConsultationModal({ appointment, onClose }: Consultation
 
   return (
     <ConsultationProvider appointment={appointment}>
-      <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="fixed inset-0 bg-text flex items-center justify-center z-50 p-4 animate-fade-in">
         <div className="bg-background text-text rounded-2xl w-full max-w-6xl h-[85vh] flex flex-col overflow-hidden shadow-2xl border border-primary-light/10">
           <ConsultationHeader onClose={onClose} />
           <div className="flex-1 flex overflow-hidden">

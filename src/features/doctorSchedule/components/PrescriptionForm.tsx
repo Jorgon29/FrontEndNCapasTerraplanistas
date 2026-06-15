@@ -13,6 +13,8 @@ function PrescriptionForm() {
     if (index === form.medicines.length - 1) addMedicineRow();
   };
 
+  if (appointment?.status === "COMPLETED") return null;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
 

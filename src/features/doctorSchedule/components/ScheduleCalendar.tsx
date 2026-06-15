@@ -5,7 +5,7 @@ import { enUS } from "date-fns/locale/en-US";
 import type { Appointment } from "@/features/utils/Appointment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import ConsultationModalV2 from "./ConsultationModalV2";
+import ConsultationModal from "./ConsultationModal";
 import BASE_URL from "@/config/config";
 
 const locales = { "en-US": enUS };
@@ -131,7 +131,7 @@ function ScheduleCalendar({ doctorUuid }: ScheduleCalendarProps) {
         />
       </div>
 
-      <ConsultationModalV2
+      <ConsultationModal
         appointment={selectedAppointment}
         onClose={() => setSelectedAppointment(null)}
       />
