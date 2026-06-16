@@ -1,12 +1,14 @@
 import type { Doctor } from "../../utils/Employees";
-import DoctorCard from "../../DoctorPage/Components/DoctorCard";
+import DoctorCard from "./DoctorCard";
 
 interface DoctorListProps {
   doctors: Doctor[];
+  onInteract: () => void;
 }
 
 export default function DoctorList({
   doctors,
+  onInteract
 }: DoctorListProps) {
   if (doctors.length === 0) {
     return (
@@ -22,6 +24,7 @@ export default function DoctorList({
         <DoctorCard
           key={doctor.id}
           doctor={doctor}
+          onInteract={onInteract}
         />
       ))}
     </div>

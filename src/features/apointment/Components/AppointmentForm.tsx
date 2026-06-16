@@ -130,7 +130,7 @@ export default function AppointmentForm({
           border
           rounded-xl
           p-3
-          min-h-[120px]
+          min-h-30
         "
       />
 

@@ -28,8 +28,3 @@
   --color-text:        #e0f2fe;
   --color-text-muted:  #7fb3d3;
 }
-
-.rbc-toolbar button {
-  all: revert;
-  cursor: pointer;
-}

@@ -1,10 +1,15 @@
 
-import SearchBar from "./Components/SearchBar";
+import SearchBar from "../../features/search/Components/SearchBar";
 import {useMemo, useState} from "react"
 import { doctors } from "@/features/utils/testingEmployees";
-import DoctorList from "./Components/DoctorList";
+import DoctorList from "../../features/search/Components/DoctorList";
+import type { Doctor } from "@/features/utils/Employees";
 
-export default function DoctorPage() {
+interface DoctorSearchProps {
+  onInteract: (arg0: Doctor) => void;
+}
+
+export default function DoctorSearchPage( onInteract : DoctorSearchProps ) {
   const [search, setSearch] = useState("");
 
   const filteredDoctors = useMemo(() => {
@@ -63,7 +68,7 @@ export default function DoctorPage() {
             {filteredDoctors.length} doctores encontrados
           </p>
 
-          <DoctorList doctors={filteredDoctors} />
+          <DoctorList doctors={filteredDoctors} onInteract={() => {onInteract}} />
         </div>
       </div>
     </div>

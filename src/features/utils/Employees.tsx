@@ -11,5 +11,4 @@ export interface Doctor{
     professional_license_number: string;
     fee_per_hour: number;
     specialties: Speciality[];
-
 }

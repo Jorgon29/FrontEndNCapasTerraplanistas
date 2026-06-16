@@ -1,13 +1,17 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
-import LoginPage from "@/pages/LoginPage";
-import RegisterPage from "@/pages/RegisterPage";
+import LoginPage from "@/pages/auth/LoginPage";
+import RegisterPage from "@/pages/auth/RegisterPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import LandingPage from "@/pages/LandingPage";
-import SearchDoctor from "@/pages/SearchDoctorPage";
-import DoctorAppointmentsPage from "@/pages/DoctorAppointmentsPage";
-import DoctorSchedulePage from "@/pages/DoctoSchedulePage";
+import SearchDoctor from "@/pages/doctor/NoAuthDoctorSearch";
+import DoctorAppointmentsPage from "@/pages/doctor/DoctorAppointmentsPage";
+import DoctorSchedulePage from "@/pages/doctor/DoctoSchedulePage";
+import PatientTopBar from "@/features/patient/PatientTopBar";
+import PatientProfilePage from "@/pages/patient/PatientProfilePage";
+import PatientSchedulePage from "@/pages/patient/PatientSchedulePage";
+import PatientSearchPage from "@/pages/patient/PatientSearchPage";
 
 function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
   return (
@@ -33,7 +37,7 @@ export const router = createBrowserRouter([
     element: <PrivacyPolicyPage />,
     children: [
       {
-        path: "/privacy", element: <></>
+        path: "/privacy", element: <PrivacyPolicyPage />
       },
     ],
   },
@@ -56,5 +60,22 @@ export const router = createBrowserRouter([
   {
     path: "/doctor/schedule/:uuid",
     element: <DoctorSchedulePage />
+  },{
+    path: "/patient",
+    element: <PatientTopBar />,
+    children: [
+      {
+        path: "/patient/schedule",
+        element: <PatientSchedulePage />
+      },
+      {
+        path: "/patient/profile",
+        element: <PatientProfilePage />
+      },
+      {
+        path: "/patient/search",
+        element: <PatientSearchPage />
+      }
+    ]
   }
 ]);
