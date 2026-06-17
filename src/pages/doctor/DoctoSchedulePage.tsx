@@ -1,6 +1,7 @@
 // pages/DoctorSchedulePage.tsx
 import { useParams } from "react-router";
 import ScheduleCalendar from "@/features/doctorSchedule/components/ScheduleCalendar";
+import ConsultationModal from "@/features/doctorSchedule/components/ConsultationModal";
 
 function DoctorSchedulePage() {
   const { uuid } = useParams<{ uuid: string }>();
@@ -10,9 +11,10 @@ function DoctorSchedulePage() {
   }
 
   return (
-    <>
-      <ScheduleCalendar doctorUuid={uuid} />
-    </>
+      <ScheduleCalendar
+        endpoint={`/api/appointments/doctor/${uuid}`}
+        Modal={ConsultationModal}
+      />
   );
 }
 

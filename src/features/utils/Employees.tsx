@@ -12,3 +12,9 @@ export interface Doctor{
     fee_per_hour: number;
     specialties: Speciality[];
 }
+
+export interface Employee{
+    id: number;
+    first_name: string;
+    last_name: string;
+}

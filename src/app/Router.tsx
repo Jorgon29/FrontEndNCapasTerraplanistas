@@ -1,5 +1,4 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Suspense, lazy } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import LoginPage from "@/pages/auth/LoginPage";
 import RegisterPage from "@/pages/auth/RegisterPage";
@@ -12,14 +11,6 @@ import PatientTopBar from "@/features/patient/PatientTopBar";
 import PatientProfilePage from "@/pages/patient/PatientProfilePage";
 import PatientSchedulePage from "@/pages/patient/PatientSchedulePage";
 import PatientSearchPage from "@/pages/patient/PatientSearchPage";
-
-function withSuspense(Component: React.LazyExoticComponent<React.ComponentType>) {
-  return (
-    <Suspense fallback={<></>}>
-      <Component />
-    </Suspense>
-  );
-}
 
 export const router = createBrowserRouter([
   {
@@ -65,7 +56,7 @@ export const router = createBrowserRouter([
     element: <PatientTopBar />,
     children: [
       {
-        path: "/patient/schedule",
+        path: "/patient/calendar",
         element: <PatientSchedulePage />
       },
       {

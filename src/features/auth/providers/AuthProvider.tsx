@@ -1,24 +1,18 @@
+import type { Doctor, Employee } from "@/features/utils/Employees";
+import type Patient from "@/features/utils/Patient";
 import {
   createContext,
   useContext,
   useState,
-  useCallback,
   useEffect
 } from "react";
-
 import type { ReactNode } from "react";
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
-
 interface AuthContextValue {
-  user: User | null;
+  patient: Patient | null;
+  doctor: Doctor | null;
+  admin: Employee | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
   isAuthenticated: boolean;
 }
 
@@ -37,41 +31,38 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [admin, setAdmin] = useState<Employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    try {
+      const storedPatient = localStorage.getItem("auth-patient");
+      const storedDoctor = localStorage.getItem("auth-doctor");
+      const storedAdmin = localStorage.getItem("auth-admin");
 
-    //placeholder
-    const storedUser = localStorage.getItem("auth-user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        localStorage.removeItem("auth-user");
-      }
+      if (storedPatient) setPatient(JSON.parse(storedPatient));
+      if (storedDoctor) setDoctor(JSON.parse(storedDoctor));
+      if (storedAdmin) setAdmin(JSON.parse(storedAdmin));
+    } catch (error) {
+      console.error("Error loading session data, purging corrupted entries:", error);
+      localStorage.removeItem("auth-patient");
+      localStorage.removeItem("auth-doctor");
+      localStorage.removeItem("auth-admin");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
-    console.log("Login called with", email, password);
-    const fakeUser: User = { id: "1", email, name: "John Doe" };
-    localStorage.setItem("auth-user", JSON.stringify(fakeUser));
-    setUser(fakeUser);
-  }, []);
-
-  const logout = useCallback(() => {
-    localStorage.removeItem("auth-user");
-    setUser(null);
-  }, []);
+  const isAuthenticated = !!patient || !!doctor || !!admin;
 
   const value: AuthContextValue = {
-    user,
+    patient,
+    doctor,
+    admin,
     isLoading,
-    login,
-    logout,
-    isAuthenticated: !!user,
+    isAuthenticated,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -3,7 +3,7 @@ import DoctorCard from "./DoctorCard";
 
 interface DoctorListProps {
   doctors: Doctor[];
-  onInteract: () => void;
+  onInteract: (arg0: Doctor) => void;
 }
 
 export default function DoctorList({
@@ -24,7 +24,7 @@ export default function DoctorList({
         <DoctorCard
           key={doctor.id}
           doctor={doctor}
-          onInteract={onInteract}
+          onInteract={() => onInteract(doctor)}
         />
       ))}
     </div>

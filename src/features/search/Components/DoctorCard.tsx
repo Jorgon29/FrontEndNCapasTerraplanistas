@@ -2,7 +2,7 @@ import type { Doctor } from "@/features/utils/Employees";
 
 interface DoctorCardProps {
   doctor: Doctor;
-  onInteract: (doctor: Doctor) => void;
+  onInteract: () => void;
 }
 
 export default function DoctorCard({
@@ -18,7 +18,7 @@ export default function DoctorCard({
         p-5
         cursor-pointer
       "
-      onClick={() => onInteract(doctor)}
+      onClick={() => onInteract()}
     >
       <div className="flex justify-between items-start">
         <div>

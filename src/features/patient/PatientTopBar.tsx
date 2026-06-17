@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Logo } from "../landing/components/NavBar";
 
 export default function PatientTopBar() {
@@ -42,7 +42,7 @@ export default function PatientTopBar() {
                     </Link>
 
                     <Link
-                        to="/calendar"
+                        to="/patient/calendar"
                         className="
                             font-medium
                             text-text-muted
@@ -54,7 +54,7 @@ export default function PatientTopBar() {
                     </Link>
 
                     <Link
-                        to="/profile"
+                        to="/patient/profile"
                         className="
                             font-medium
                             text-text-muted
@@ -174,6 +174,7 @@ export default function PatientTopBar() {
                     </div>
                 </div>
             )}
+            <Outlet />
         </nav>
     );
 }

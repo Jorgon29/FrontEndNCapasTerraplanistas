@@ -68,7 +68,7 @@ export default function DoctorSearchPage( onInteract : DoctorSearchProps ) {
             {filteredDoctors.length} doctores encontrados
           </p>
 
-          <DoctorList doctors={filteredDoctors} onInteract={() => {onInteract}} />
+          <DoctorList doctors={filteredDoctors} onInteract={onInteract.onInteract} />
         </div>
       </div>
     </div>
