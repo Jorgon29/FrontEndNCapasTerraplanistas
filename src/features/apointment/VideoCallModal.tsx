@@ -27,7 +27,7 @@ export default function VideoCallModal({
         className="
           bg-white
           rounded-2xl
-          w-[700px]
+          w-175
           p-6
         "
       >
@@ -49,7 +49,7 @@ export default function VideoCallModal({
             mt-6
             bg-gray-900
             rounded-2xl
-            h-[400px]
+            h-100
             flex
             items-center
             justify-center
