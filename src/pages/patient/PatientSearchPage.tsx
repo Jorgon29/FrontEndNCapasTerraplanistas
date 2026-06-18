@@ -3,6 +3,7 @@ import DoctorSearchPage from "../doctor/DoctorSearchPage";
 import BookingModal from "@/features/search/Components/BookingModal";
 import type { Appointment } from "@/features/utils/Appointment";
 import type { Doctor } from "@/features/utils/Employees";
+import type { AppointmentRequest } from "@/features/utils/AppointmentRequest";
 
 function PatientSearchPage() {
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
@@ -18,7 +19,7 @@ function PatientSearchPage() {
         <BookingModal
           doctor={selectedDoctor}
           appointments={doctorAppointments}
-          onBook={(appointment: Appointment) => {
+          onBook={(appointment: AppointmentRequest) => {
             console.log("Booking appointment:", appointment);
           }}
           onClose={() => setSelectedDoctor(null)}
