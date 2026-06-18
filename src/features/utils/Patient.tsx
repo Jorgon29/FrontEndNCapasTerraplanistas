@@ -1,6 +1,6 @@
 export default interface Patient {
-    id: String,
-    first_name: String,
-    last_name: String,
-    phones: [String]
+    id: string,
+    first_name: string,
+    last_name: string,
+    phones: string
 }

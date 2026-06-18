@@ -32,14 +32,12 @@ export default function DoctorCard({
             {doctor.professional_license_number}
           </p>
 
-          <p className="text-primary font-semibold mt-2">
-            ${doctor.fee_per_hour}/hora
-          </p>
         </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mt-4">
         {doctor.specialties.map((specialty) => (
+          <>
           <span
             key={specialty.id}
             className="
@@ -52,8 +50,9 @@ export default function DoctorCard({
               font-medium
             "
           >
-            {specialty.name}
+            {specialty.name} / ${specialty.feePerHour}/hora
           </span>
+          </>
         ))}
       </div>
     </div>

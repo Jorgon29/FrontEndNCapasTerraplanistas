@@ -1,16 +1,18 @@
 export interface Speciality{
-    id: number;
-    code: string;
+    id: string;
+    licence: string;
     name: string;
+    feePerHour: number
 }
 
 export interface Doctor{
-    id: number;
+    id: string;
+    employee_id: string;
     first_name: string;
     last_name: string;
     professional_license_number: string;
-    fee_per_hour: number;
-    specialties: Speciality[];
+    is_active: boolean,
+    specialties: Speciality[]
 }
 
 export interface Employee{

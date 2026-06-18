@@ -12,12 +12,12 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales
 
 const DUMMY_APPOINTMENTS: Appointment[] = [
   {
-    id: 1, patient_id: 1, patient_name: "Juan Pérez", employee_id: 1,
+    id: "adad", patient_id: "awdaddsf", patient_name: "Juan Pérez", employee_id: "asdasd",
     doctor_name: "Carlos Gómez", expected_at: "2026-06-20T10:00:00",
     status: "SCHEDULED", meeting_link: "https://meet.fake/abc123", notes: "Consulta cardiológica",
   },
   {
-    id: 2, patient_id: 2, patient_name: "Ana Martínez", employee_id: 1,
+    id: "asdasdad", patient_id: "fasdadasd", patient_name: "Ana Martínez", employee_id: "asdadawd",
     doctor_name: "Carlos Gómez", expected_at: "2026-06-21T15:30:00",
     status: "COMPLETED", meeting_link: "https://meet.fake/xyz789", notes: "Control médico",
   },

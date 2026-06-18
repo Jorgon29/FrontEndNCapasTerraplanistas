@@ -11,61 +11,78 @@ import PatientTopBar from "@/features/patient/PatientTopBar";
 import PatientProfilePage from "@/pages/patient/PatientProfilePage";
 import PatientSchedulePage from "@/pages/patient/PatientSchedulePage";
 import PatientSearchPage from "@/pages/patient/PatientSearchPage";
+import AdminTopBar from "@/features/admin/AdminTopBar";
+import AdminSearchPage from "@/pages/admin/AdminSearchPage";
+import ErrorPage from "@/pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
-    element: <AuthLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/auth/login", element: <LoginPage />
+        element: <AuthLayout />,
+        children: [
+          {
+            path: "/auth/login", element: <LoginPage />
+          },
+          {
+            path: "/auth/register", element: <RegisterPage />
+          }
+        ],
       },
       {
-        path: "/auth/register", element: <RegisterPage />
-      }
-    ],
-  },
-  {
-    element: <PrivacyPolicyPage />,
-    children: [
-      {
-        path: "/privacy", element: <PrivacyPolicyPage />
-      },
-    ],
-  },
-  {
-    path: "/",
-    element: <LandingPage />
-  },
-  {
-    path: "*",
-    element: <h1>Not found</h1>,
-  },
-  {
-    path: "/search",
-    element: <SearchDoctor />
-  },
-  {
-    path: "/doctor/appointment",
-    element: <DoctorAppointmentsPage />
-  },
-  {
-    path: "/doctor/schedule/:uuid",
-    element: <DoctorSchedulePage />
-  },{
-    path: "/patient",
-    element: <PatientTopBar />,
-    children: [
-      {
-        path: "/patient/calendar",
-        element: <PatientSchedulePage />
+        element: <PrivacyPolicyPage />,
+        children: [
+          {
+            path: "/privacy", element: <PrivacyPolicyPage />
+          },
+        ],
       },
       {
-        path: "/patient/profile",
-        element: <PatientProfilePage />
+        path: "/",
+        element: <LandingPage />
       },
       {
-        path: "/patient/search",
-        element: <PatientSearchPage />
+        path: "*",
+        element: <h1>Not found</h1>,
+      },
+      {
+        path: "/search",
+        element: <SearchDoctor />
+      },
+      {
+        path: "/doctor/appointment",
+        element: <DoctorAppointmentsPage />
+      },
+      {
+        path: "/doctor/schedule/:uuid",
+        element: <DoctorSchedulePage />
+      }, {
+        path: "/patient",
+        element: <PatientTopBar />,
+        children: [
+          {
+            path: "/patient/calendar",
+            element: <PatientSchedulePage />
+          },
+          {
+            path: "/patient/profile",
+            element: <PatientProfilePage />
+          },
+          {
+            path: "/patient/search",
+            element: <PatientSearchPage />
+          }
+        ]
+      }, {
+        path: "/admin",
+        element: <AdminTopBar />,
+        children: [
+          {
+            path: "/admin/search",
+            element: <AdminSearchPage />
+          }
+        ]
       }
     ]
   }

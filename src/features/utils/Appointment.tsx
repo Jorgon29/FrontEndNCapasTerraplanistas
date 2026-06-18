@@ -1,11 +1,11 @@
 export interface Appointment {
-  id: number;
+  id: string | null;
 
-  patient_id: number;
+  patient_id: string;
 
   patient_name: string;
 
-  employee_id: number;
+  employee_id: string;
 
   doctor_name: string;
 
@@ -28,11 +28,11 @@ export interface Appointment {
 
 export const appointments: Appointment[] = [
   {
-    id: 1,
-    patient_id: 1,
+    id: "awdawdaaafasadsads",
+    patient_id: "awdadawdad",
     patient_name: "Juan Pérez",
 
-    employee_id: 1,
+    employee_id: "awdadaadasdasd",
     doctor_name: "Dr. Carlos Gómez",
 
     expected_at: "2026-06-20T10:00:00",
@@ -45,11 +45,11 @@ export const appointments: Appointment[] = [
   },
 
   {
-    id: 2,
-    patient_id: 2,
+    id: "awdawdad",
+    patient_id: "avsfasda",
     patient_name: "Ana Martínez",
 
-    employee_id: 1,
+    employee_id: "dfsasdads",
     doctor_name: "Dr. Carlos Gómez",
 
     expected_at: "2026-06-21T15:30:00",

@@ -1,10 +1,12 @@
 import { useState } from "react";
 
 import type { Appointment } from "@/features/utils/Appointment";
+import { useAuth } from "@/features/auth/providers/AuthProvider";
+import type { AppointmentRequest } from "@/features/utils/AppointmentRequest";
 
 interface AppointmentFormProps {
   onCreate: (
-    appointment: Appointment
+    appointment: AppointmentRequest
   ) => void;
 }
 
@@ -23,35 +25,40 @@ export default function AppointmentForm({
   const [notes, setNotes] =
     useState("");
 
+  const { doctor } = useAuth();
+
   const handleSubmit = (
     e: React.FormEvent
   ) => {
     e.preventDefault();
 
-    const appointment: Appointment = {
-      id: Date.now(),
+    if (!doctor || !doctor.specialties[0]) {
+      return <></>
+    }
 
-      patient_id: 1,
+    const appointment: AppointmentRequest = {
 
-      patient_name: patientName,
+      patientId: "1111-1111-1111-1111",
 
-      employee_id: 1,
+      score: null,
 
-      doctor_name:
-        "Dr. Carlos Gómez",
+      review: null,
 
-      expected_at:
+      patientCallerUserId: "1111-1111-1111-1111",
+
+      employeeId: doctor?.employee_id,
+
+      expectedAt:
         `${date}T${time}:00`,
+
+      registeredAt: new Date().toISOString(),
 
       status: "SCHEDULED",
 
-      meeting_link:
-        "https://meet.fake/" +
-        Math.random()
-          .toString(36)
-          .substring(7),
+      finalFeePerHour: doctor.specialties[0]?.feePerHour,
 
-      notes,
+      googleEventId: "awdad"
+
     };
 
     onCreate(appointment);

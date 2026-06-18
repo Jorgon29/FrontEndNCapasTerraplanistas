@@ -1,8 +1,9 @@
+import { Link } from "lucide-react";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { Logo } from "../landing/components/NavBar";
 
-export default function PatientTopBar() {
+function AdminTopBar(){
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -30,7 +31,7 @@ export default function PatientTopBar() {
                 <div className="hidden md:flex items-center gap-8">
 
                     <Link
-                        to="/patient/search"
+                        to="/admin/search"
                         className="
                             font-medium
                             text-text-muted
@@ -38,31 +39,7 @@ export default function PatientTopBar() {
                             transition-colors
                         "
                     >
-                        Buscador
-                    </Link>
-
-                    <Link
-                        to="/patient/calendar"
-                        className="
-                            font-medium
-                            text-text-muted
-                            hover:text-primary
-                            transition-colors
-                        "
-                    >
-                        Calendario
-                    </Link>
-
-                    <Link
-                        to="/patient/profile"
-                        className="
-                            font-medium
-                            text-text-muted
-                            hover:text-primary
-                            transition-colors
-                        "
-                    >
-                        Perfil
+                        Doctores
                     </Link>
 
                     <button
@@ -79,7 +56,6 @@ export default function PatientTopBar() {
                     </button>
                 </div>
 
-                {/* Hamburger */}
                 <button
                     onClick={() => setMenuOpen(!menuOpen)}
                     className="
@@ -127,7 +103,7 @@ export default function PatientTopBar() {
                     <div className="flex flex-col p-3">
 
                         <Link
-                            to="/patient/search"
+                            to="/admin/search"
                             className="
                                 rounded-lg px-4 py-3
                                 text-text
@@ -136,30 +112,6 @@ export default function PatientTopBar() {
                             "
                         >
                             Buscador
-                        </Link>
-
-                        <Link
-                            to="/patient/calendar"
-                            className="
-                                rounded-lg px-4 py-3
-                                text-text
-                                hover:bg-surface-alt
-                                transition
-                            "
-                        >
-                            Calendario
-                        </Link>
-
-                        <Link
-                            to="/patient/profile"
-                            className="
-                                rounded-lg px-4 py-3
-                                text-text
-                                hover:bg-surface-alt
-                                transition
-                            "
-                        >
-                            Perfil
                         </Link>
 
                         <button
@@ -178,3 +130,5 @@ export default function PatientTopBar() {
         </nav>
     );
 }
+
+export default AdminTopBar;
