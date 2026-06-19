@@ -23,8 +23,7 @@ export default function CreateDoctorPage() {
             </div>
           </div>
         </div>
-
-        {/* Status Banners */}
+        
         {error && (
           <div className="mx-8 mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-red-600">
             <FontAwesomeIcon icon={faExclamationCircle} className="mt-0.5" />
@@ -39,11 +38,9 @@ export default function CreateDoctorPage() {
           </div>
         )}
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            {/* First Name */}
             <div>
               <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Nombres
@@ -60,7 +57,6 @@ export default function CreateDoctorPage() {
               />
             </div>
 
-            {/* Last Name */}
             <div>
               <label htmlFor="lastName" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Apellidos
@@ -77,7 +73,6 @@ export default function CreateDoctorPage() {
               />
             </div>
 
-            {/* ID Type */}
             <div>
               <label htmlFor="idType" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Tipo de Documento
@@ -95,7 +90,6 @@ export default function CreateDoctorPage() {
               </select>
             </div>
 
-            {/* ID Number */}
             <div>
               <label htmlFor="idNumber" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Número de Documento
@@ -112,7 +106,6 @@ export default function CreateDoctorPage() {
               />
             </div>
 
-            {/* Phone */}
             <div>
               <label htmlFor="phones" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Teléfono
@@ -147,7 +140,6 @@ export default function CreateDoctorPage() {
 
           </div>
 
-          {/* Actions */}
           <div className="mt-4 pt-6 border-t border-surface-alt flex justify-end">
             <button
               type="submit"
