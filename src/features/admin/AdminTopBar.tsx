@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router";
 import { Logo } from "../landing/components/NavBar";
+import { useAuth } from "../auth/providers/AuthProvider";
 
 function AdminTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const {logout} = useAuth();
     return (
         <nav className="
             sticky top-0 z-50
@@ -143,6 +144,7 @@ function AdminTopBar() {
                                 bg-danger
                                 text-white
                             "
+                            onClick={() => logout()}
                         >
                             Salir
                         </button>

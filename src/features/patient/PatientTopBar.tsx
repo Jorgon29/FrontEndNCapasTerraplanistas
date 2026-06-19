@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Logo } from "../landing/components/NavBar";
+import { useAuth } from "../auth/providers/AuthProvider";
 
 export default function PatientTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const {logout} = useAuth();
 
     return (
         <nav className="
@@ -123,7 +125,7 @@ export default function PatientTopBar() {
                         border-surface-alt
                         bg-surface
                     "
-                >
+                >navigate
                     <div className="flex flex-col p-3">
 
                         <Link
@@ -168,6 +170,8 @@ export default function PatientTopBar() {
                                 bg-danger
                                 text-white
                             "
+
+                            onClick={() => logout()}
                         >
                             Salir
                         </button>
