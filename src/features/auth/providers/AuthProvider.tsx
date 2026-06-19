@@ -5,7 +5,8 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect
+  useEffect,
+  useCallback
 } from "react";
 import type { ReactNode } from "react";
 import { redirect } from "react-router";
@@ -47,39 +48,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
-  const logout = () => {
-    console.log("logout called")
+  const logout = useCallback(() => {
     localStorage.clear();
-    localStorage.setItem("auth-logged-out", "true"); 
-    window.location.href = "/";
-  }
+    setPatient(null);
+    setDoctor(null);
+    setAdmin(null);
+  }, []);
 
-useEffect(() => {
-  try {
-    const storedPatient = localStorage.getItem("auth-patient");
-    const storedDoctor  = localStorage.getItem("auth-doctor");
-    const storedAdmin   = localStorage.getItem("auth-admin");
-    const explicitlyLoggedOut = localStorage.getItem("auth-logged-out") === "true";
+  useEffect(() => {
+    try {
+      const storedPatient = localStorage.getItem("auth-patient");
+      const storedDoctor = localStorage.getItem("auth-doctor");
+      const storedAdmin = localStorage.getItem("auth-admin");
+      const explicitlyLoggedOut = localStorage.getItem("auth-logged-out") === "true";
 
-    if (storedPatient) {
-      setPatient(JSON.parse(storedPatient));
-    } else if (ENV === "DEV" && !explicitlyLoggedOut) {
-      localStorage.setItem("auth-patient", JSON.stringify(MOCK_PATIENT));
-      setPatient(MOCK_PATIENT);
+      if (storedPatient) {
+        setPatient(JSON.parse(storedPatient));
+      } else if (ENV === "DEV" && !explicitlyLoggedOut) {
+        localStorage.setItem("auth-patient", JSON.stringify(MOCK_PATIENT));
+        setPatient(MOCK_PATIENT);
+      }
+
+      if (storedDoctor) setDoctor(JSON.parse(storedDoctor));
+      if (storedAdmin) setAdmin(JSON.parse(storedAdmin));
+
+    } catch (error) {
+      console.error("Error loading session data, purging corrupted entries:", error);
+      localStorage.removeItem("auth-patient");
+      localStorage.removeItem("auth-doctor");
+      localStorage.removeItem("auth-admin");
+    } finally {
+      setIsLoading(false);
     }
-
-    if (storedDoctor) setDoctor(JSON.parse(storedDoctor));
-    if (storedAdmin)  setAdmin(JSON.parse(storedAdmin));
-
-  } catch (error) {
-    console.error("Error loading session data, purging corrupted entries:", error);
-    localStorage.removeItem("auth-patient");
-    localStorage.removeItem("auth-doctor");
-    localStorage.removeItem("auth-admin");
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+  }, []);
 
   const isAuthenticated = !!patient || !!doctor || !!admin;
 

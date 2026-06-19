@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Logo } from "../landing/components/NavBar";
 import { useAuth } from "../auth/providers/AuthProvider";
 
 export default function PatientTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const {logout} = useAuth();
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    };
 
     return (
         <nav className="
@@ -76,6 +81,7 @@ export default function PatientTopBar() {
                             transition
                             cursor-pointer
                         "
+                        onClick={() => handleLogout()}
                     >
                         Salir
                     </button>
@@ -170,8 +176,7 @@ export default function PatientTopBar() {
                                 bg-danger
                                 text-white
                             "
-
-                            onClick={() => logout()}
+                            onClick={() => handleLogout()}
                         >
                             Salir
                         </button>

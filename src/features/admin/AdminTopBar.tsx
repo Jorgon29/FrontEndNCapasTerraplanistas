@@ -1,11 +1,16 @@
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { Logo } from "../landing/components/NavBar";
 import { useAuth } from "../auth/providers/AuthProvider";
 
 function AdminTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const {logout} = useAuth();
+    const navigate = useNavigate();
+    const { logout } = useAuth();
+    const handleLogout = () => {
+        logout();
+        navigate("/");
+    };
     return (
         <nav className="
             sticky top-0 z-50
@@ -54,7 +59,7 @@ function AdminTopBar() {
                         Crear
                     </Link>
 
-                                        <Link
+                    <Link
                         to="/admin/specialties"
                         className="
                             font-medium
@@ -75,6 +80,7 @@ function AdminTopBar() {
                             transition
                             cursor-pointer
                         "
+                        onClick={() => handleLogout()}
                     >
                         Salir
                     </button>
@@ -144,7 +150,7 @@ function AdminTopBar() {
                                 bg-danger
                                 text-white
                             "
-                            onClick={() => logout()}
+                            onClick={() => handleLogout()}
                         >
                             Salir
                         </button>
