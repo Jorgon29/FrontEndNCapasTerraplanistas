@@ -53,6 +53,18 @@ function AdminTopBar() {
                         Crear
                     </Link>
 
+                                        <Link
+                        to="/admin/specialties"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Especialidades
+                    </Link>
+
                     <button
                         className="
                             rounded-lg px-4 py-2

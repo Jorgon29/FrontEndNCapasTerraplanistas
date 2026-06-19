@@ -14,6 +14,7 @@ import AdminTopBar from "@/features/admin/AdminTopBar";
 import AdminSearchPage from "@/pages/admin/AdminSearchPage";
 import ErrorPage from "@/pages/ErrorPage";
 import CreateDoctorPage from "@/pages/admin/CreateDoctorPage";
+import SpecialtiesPage from "@/pages/admin/SpecialtiesPage";
 
 export const router = createBrowserRouter([
   {
@@ -81,6 +82,9 @@ export const router = createBrowserRouter([
           {
             path: "/admin/employee",
             element: <CreateDoctorPage />
+          }, {
+            path: "/admin/specialties",
+            element: <SpecialtiesPage />
           }
         ]
       }
