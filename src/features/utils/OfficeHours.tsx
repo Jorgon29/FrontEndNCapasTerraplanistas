@@ -5,6 +5,7 @@ export interface OfficeHours {
   day: DayOfTheWeek;
   startTime: string;
   endTime: string;
+
 }
 
 export interface BackendOfficeHourDTO {

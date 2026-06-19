@@ -24,8 +24,8 @@ const DUMMY_APPOINTMENTS: Appointment[] = [
 ];
 
 interface ScheduleCalendarProps {
-  endpoint: string;                                          // e.g. `/api/appointments/doctor/${uuid}`
-  eventTitle?: (apt: Appointment) => string;                 // how to label events
+  endpoint: string;
+  eventTitle?: (apt: Appointment) => string;
   Modal: React.ComponentType<{ appointment: Appointment | null; onClose: () => void }>;
 }
 

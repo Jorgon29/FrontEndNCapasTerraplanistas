@@ -109,21 +109,6 @@ export function useDoctorSchedule() {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const targetMockAppointments: Appointment[] = [
-      {
-        id: "mock-apt-1", googleEventId: "g-123", status: "CONFIRMED", finalFeePerHour: 50.0,
-        score: null, review: null, employeeId: doctorId, patientId: "p-1", patientCallerUserId: "caller-1",
-        registeredAt: new Date().toISOString(),
-        expectedAt: `${today.toISOString().split("T")[0]}T10:00:00+01:00`,
-      },
-      {
-        id: "mock-apt-2", googleEventId: "g-124", status: "SCHEDULED", finalFeePerHour: 50.0,
-        score: null, review: null, employeeId: doctorId, patientId: "p-2", patientCallerUserId: "caller-2",
-        registeredAt: new Date().toISOString(),
-        expectedAt: `${tomorrow.toISOString().split("T")[0]}T15:00:00+01:00`,
-      }
-    ];
-
     try {
       const response = await fetch(`${BASE_URL}/appointments/employee/${doctorId}`, {
         method: "GET", headers: { "Content-Type": "application/json" }
@@ -165,9 +150,7 @@ export function useDoctorSchedule() {
       console.error("Failed fetching doctor appointments:", err);
 
       if (ENV === "DEV" || import.meta.env.MODE === "development" || ENV === "development") {
-        console.warn("[DEV MODE] Catch block activated. Injecting mock appointments.");
-        setAppointments(targetMockAppointments);
-        setAppointmentsError(null);
+
       } else {
         setAppointmentsError(err.message || "Ocurrió un error al obtener las citas.");
       }

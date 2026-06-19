@@ -1,6 +1,7 @@
 import type { OfficeHours } from "./OfficeHours";
 
 export interface Speciality{
+    code?: string,
     id: string;
     licence: string;
     name: string;

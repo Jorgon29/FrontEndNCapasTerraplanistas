@@ -135,6 +135,7 @@ export const mockDoctors: Doctor[] = [
         id: "spec-6",
         licence: "OFT-001",
         name: "Oftalmología",
+        code: "OFT",
         feePerHour: 70,
         duration: 30,
         officeHours: [
@@ -145,6 +146,7 @@ export const mockDoctors: Doctor[] = [
         id: "spec-7",
         licence: "TRAU-001",
         name: "Traumatología",
+        code: "TRA",
         feePerHour: 90,
         duration: 45,
         officeHours: [
