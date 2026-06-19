@@ -1,4 +1,3 @@
-
 export enum DayOfTheWeek {
     MONDAY,
     TUESDAY,
@@ -6,7 +5,8 @@ export enum DayOfTheWeek {
     THURSDAY,
     FRIDAY,
     SATURDAY,
-    SUNDAY
+    SUNDAY,
+    MISSIGNO
 }
 
 export function dayToSpanish(day: DayOfTheWeek): string {
@@ -22,7 +22,20 @@ export function dayToSpanish(day: DayOfTheWeek): string {
     }
 }
 
-export function englishStringToDay(dayStr: string): DayOfTheWeek | undefined {
+export function dayToEnglish(day: DayOfTheWeek): string {
+    switch (day) {
+        case DayOfTheWeek.MONDAY: return "MONDAY";
+        case DayOfTheWeek.TUESDAY: return "TUESDAY";
+        case DayOfTheWeek.WEDNESDAY: return "WEDNESDAY";
+        case DayOfTheWeek.THURSDAY: return "THURSDAY";
+        case DayOfTheWeek.FRIDAY: return "FRIDAY";
+        case DayOfTheWeek.SATURDAY: return "SATURDAY";
+        case DayOfTheWeek.SUNDAY: return "SUNDAY";
+        default: return "UNKNOWN";
+    }
+}
+
+export function englishStringToDay(dayStr: string): DayOfTheWeek{
     const normalized = dayStr.trim().toUpperCase();
 
     switch (normalized) {
@@ -33,6 +46,6 @@ export function englishStringToDay(dayStr: string): DayOfTheWeek | undefined {
         case "FRIDAY": return DayOfTheWeek.FRIDAY;
         case "SATURDAY": return DayOfTheWeek.SATURDAY;
         case "SUNDAY": return DayOfTheWeek.SUNDAY;
-        default: return undefined;
+        default: return DayOfTheWeek.MISSIGNO;
     }
 }

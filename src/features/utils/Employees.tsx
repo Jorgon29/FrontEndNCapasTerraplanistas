@@ -1,8 +1,12 @@
+import type { OfficeHours } from "./OfficeHours";
+
 export interface Speciality{
     id: string;
     licence: string;
     name: string;
-    feePerHour: number
+    feePerHour: number,
+    duration: number,
+    officeHours: OfficeHours[]
 }
 
 export interface Doctor{
@@ -12,7 +16,9 @@ export interface Doctor{
     last_name: string;
     professional_license_number: string;
     is_active: boolean,
-    specialties: Speciality[]
+    specialties: Speciality[],
+    email: string,
+    idType: "DNI" | "PASSPORT"
 }
 
 export interface Employee{

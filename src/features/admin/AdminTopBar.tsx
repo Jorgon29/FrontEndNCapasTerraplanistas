@@ -1,9 +1,8 @@
-import { Link } from "lucide-react";
 import { useState } from "react";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import { Logo } from "../landing/components/NavBar";
 
-function AdminTopBar(){
+function AdminTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -39,7 +38,19 @@ function AdminTopBar(){
                             transition-colors
                         "
                     >
-                        Doctores
+                        Buscar
+                    </Link>
+
+                    <Link
+                        to="/admin/employee"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Crear
                     </Link>
 
                     <button

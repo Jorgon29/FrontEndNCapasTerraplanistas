@@ -1,6 +1,7 @@
 import type { DayOfTheWeek } from "./DaysOfTheWeek";
 
 export interface OfficeHours {
+  id?: string;
   day: DayOfTheWeek;
   startTime: string;
   endTime: string;

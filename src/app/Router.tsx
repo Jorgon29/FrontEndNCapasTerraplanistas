@@ -5,7 +5,6 @@ import RegisterPage from "@/pages/auth/RegisterPage";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import LandingPage from "@/pages/LandingPage";
 import SearchDoctor from "@/pages/doctor/NoAuthDoctorSearch";
-import DoctorAppointmentsPage from "@/pages/doctor/DoctorAppointmentsPage";
 import DoctorSchedulePage from "@/pages/doctor/DoctoSchedulePage";
 import PatientTopBar from "@/features/patient/PatientTopBar";
 import PatientProfilePage from "@/pages/patient/PatientProfilePage";
@@ -14,6 +13,7 @@ import PatientSearchPage from "@/pages/patient/PatientSearchPage";
 import AdminTopBar from "@/features/admin/AdminTopBar";
 import AdminSearchPage from "@/pages/admin/AdminSearchPage";
 import ErrorPage from "@/pages/ErrorPage";
+import CreateDoctorPage from "@/pages/admin/CreateDoctorPage";
 
 export const router = createBrowserRouter([
   {
@@ -51,10 +51,6 @@ export const router = createBrowserRouter([
         element: <SearchDoctor />
       },
       {
-        path: "/doctor/appointment",
-        element: <DoctorAppointmentsPage />
-      },
-      {
         path: "/doctor/schedule/:uuid",
         element: <DoctorSchedulePage />
       }, {
@@ -81,6 +77,10 @@ export const router = createBrowserRouter([
           {
             path: "/admin/search",
             element: <AdminSearchPage />
+          },
+          {
+            path: "/admin/employee",
+            element: <CreateDoctorPage />
           }
         ]
       }
