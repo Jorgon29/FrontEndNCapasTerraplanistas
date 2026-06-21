@@ -15,12 +15,14 @@ function VideoPanel() {
       </div>
       <div className="bg-black/40 p-4 rounded-xl border border-white/5 backdrop-blur-md">
         <span className="text-xs uppercase text-zinc-400 tracking-wider block mb-1">Enlace alternativo</span>
-        
+
+
+        <a
           href={appointment?.meeting_link}
           target="_blank"
           rel="noreferrer"
           className="text-primary hover:underline text-sm break-all font-mono"
-        <a>
+        >
           {appointment?.meeting_link}
         </a>
       </div>
