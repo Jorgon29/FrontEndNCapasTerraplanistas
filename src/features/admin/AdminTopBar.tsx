@@ -36,6 +36,18 @@ function AdminTopBar() {
                 <div className="hidden md:flex items-center gap-8">
 
                     <Link
+                        to="/admin"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Inicio
+                    </Link>
+
+                    <Link
                         to="/admin/search"
                         className="
                             font-medium
@@ -131,6 +143,18 @@ function AdminTopBar() {
                     "
                 >
                     <div className="flex flex-col p-3">
+
+                        <Link
+                            to="/admin"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                            "
+                        >
+                            Inicio
+                        </Link>
 
                         <Link
                             to="/admin/search"

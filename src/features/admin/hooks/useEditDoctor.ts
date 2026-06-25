@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 import type { Doctor, Speciality } from "@/features/utils/Employees";
 import { DayOfTheWeek, dayToEnglish } from "@/features/utils/DaysOfTheWeek";
 import type { OfficeHours } from "@/features/utils/OfficeHours";
@@ -34,16 +34,11 @@ function useEditDoctor(doctor: Doctor) {
         };
 
         try {
-            const response = await fetch(`${BASE_URL}/availability`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
+            const response = await apiClient.post("/availability", payload);
 
-            if (!response.ok) throw new Error("Error creating availability");
+            if (response.status !== 200 && response.status !== 201) throw new Error("Error creating availability");
 
-            const data = await response.json();
-            const createdRecord = data.data;
+            const createdRecord = response.data.data;
 
             setLocalSpecialties((prev) =>
                 prev.map((spec) => {
@@ -77,11 +72,9 @@ function useEditDoctor(doctor: Doctor) {
 
     const handleDelete = async (availabilityId: string) => {
         try {
-            const response = await fetch(`${BASE_URL}/availability/${availabilityId}`, {
-                method: "DELETE",
-            });
+            const response = await apiClient.delete(`/availability/${availabilityId}`);
 
-            if (!response.ok) throw new Error("Error deleting availability");
+            if (response.status !== 200 && response.status !== 204) throw new Error("Error deleting availability");
 
             setLocalSpecialties((prev) =>
                 prev.map((spec) => {

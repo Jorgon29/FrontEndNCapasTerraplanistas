@@ -6,13 +6,12 @@ import ConsultationModal from "@/features/doctorSchedule/components/Consultation
 function DoctorSchedulePage() {
   const { uuid } = useParams<{ uuid: string }>();
 
-  if (!uuid) {
-    return <div className="text-center p-8 text-text">ID de doctor no proporcionado.</div>;
-  }
+  const today = new Date();
+  const currentMonth = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
   return (
       <ScheduleCalendar
-        endpoint={`/api/appointments/doctor/${uuid}`}
+        endpoint={`/appointments/my-appointments?month=${currentMonth}`}
         Modal={ConsultationModal}
       />
   );

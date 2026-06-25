@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 import { useAuth } from "@/features/auth/providers/AuthProvider";
 import type Patient from "@/features/utils/Patient";
 
@@ -39,17 +39,10 @@ export function usePatientProfile(initialPatient: Patient | null) {
                 address: formData.address,
             };
 
-            const response = await fetch(`${BASE_URL}/auth/profile`, {
-                method: "PUT",
-                headers: { 
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
+            const response = await apiClient.put("/auth/profile", payload);
 
-            if (!response.ok) {
-                const errData = await response.json().catch(() => null);
-                throw new Error(errData?.message || "Error al actualizar el perfil.");
+            if (response.status !== 200) {
+                throw new Error(response.data?.message || "Error al actualizar el perfil.");
             }
 
             setSuccess("¡Perfil actualizado con éxito!");
@@ -67,11 +60,7 @@ export function usePatientProfile(initialPatient: Patient | null) {
         setError(null);
 
         try {
-            const response = await fetch(`${BASE_URL}/auth/profile`, {
-                method: "DELETE"
-            });
-
-            if (!response.ok) throw new Error("Error al intentar eliminar la cuenta.");
+            await apiClient.delete("/auth/profile");
 
             if (logout) {
                 logout(); 

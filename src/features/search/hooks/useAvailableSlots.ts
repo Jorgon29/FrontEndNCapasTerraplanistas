@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import BASE_URL from "@/config/config";
-import { format, eachDayOfInterval } from "date-fns";
+import apiClient from "@/lib/apiClient";
+import { format } from "date-fns";
 
 export interface AvailableSlotResponse {
     doctorId: string;
@@ -15,51 +15,6 @@ export interface AvailableSlotResponse {
     consultDurationMinutes: number;
 }
 
-function generateMockSlots(
-    doctorId: string,
-    specialtyCode: string,
-    startDate: Date,
-    endDate: Date,
-    durationMinutes: number
-): AvailableSlotResponse[] {
-    const daysInRange = eachDayOfInterval({ start: startDate, end: endDate });
-    const mockSlots: AvailableSlotResponse[] = [];
-
-    daysInRange.forEach((day) => {
-        if (day.getDay() === 0) return;
-
-        const dateStr = format(day, "yyyy-MM-dd");
-
-        mockSlots.push({
-            doctorId,
-            doctorFirstName: "Mock",
-            doctorLastName: "Doctor",
-            specialtyCode,
-            specialtyName: "Especialidad Mock",
-            date: dateStr,
-            startTime: "09:00:00Z",
-            endTime: "10:00:00Z",
-            feePerHour: 150.00,
-            consultDurationMinutes: durationMinutes
-        });
-
-        mockSlots.push({
-            doctorId,
-            doctorFirstName: "Mock",
-            doctorLastName: "Doctor",
-            specialtyCode,
-            specialtyName: "Especialidad Mock",
-            date: dateStr,
-            startTime: "14:00:00Z",
-            endTime: "15:00:00Z", 
-            feePerHour: 150.00,
-            consultDurationMinutes: durationMinutes
-        });
-    });
-
-    return mockSlots;
-}
-
 export function useAvailableSlots(
     doctorId: string | undefined,
     specialtyCode: string | undefined,
@@ -69,30 +24,14 @@ export function useAvailableSlots(
 ) {
     const [slots, setSlots] = useState<AvailableSlotResponse[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const isDevMode = import.meta.env.DEV; 
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!doctorId || !specialtyCode || !consultDurationMinutes) return;
 
         const fetchSlots = async () => {
             setIsLoading(true);
-
-            if (isDevMode) {
-                console.warn("Dev Injecting mock available slots.");
-                setTimeout(() => {
-                    const mockData = generateMockSlots(
-                        doctorId, 
-                        specialtyCode, 
-                        startDate, 
-                        endDate, 
-                        consultDurationMinutes
-                    );
-                    setSlots(mockData);
-                    setIsLoading(false);
-                }, 800);
-                return;
-            }
-            // -------------------------------
+            setError(null);
 
             try {
                 const params = new URLSearchParams({
@@ -103,20 +42,18 @@ export function useAvailableSlots(
                     consultDurationMinutes: consultDurationMinutes.toString(),
                 });
 
-                const res = await fetch(`${BASE_URL}/slots/available?${params.toString()}`);
-                if (!res.ok) throw new Error("Error fetching available slots");
-                
-                const json = await res.json();
-                setSlots(json.data || []);
-            } catch (error) {
+                const res = await apiClient.get(`/slots/available?${params.toString()}`);
+                setSlots(res.data.data || []);
+            } catch (error: any) {
                 console.error("Failed to load slots:", error);
+                setError(error.response?.data?.message || "Failed to load available slots");
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchSlots();
-    }, [doctorId, specialtyCode, startDate, endDate, consultDurationMinutes, isDevMode]);
+    }, [doctorId, specialtyCode, startDate, endDate, consultDurationMinutes]);
 
-    return { slots, isLoading };
+    return { slots, isLoading, error };
 }

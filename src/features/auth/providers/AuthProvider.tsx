@@ -9,23 +9,36 @@ import {
   useCallback
 } from "react";
 import type { ReactNode } from "react";
-import { redirect } from "react-router";
+import { authStorage, AuthUser } from "@/lib/authStorage";
+import apiClient from "@/lib/apiClient";
+
+interface PatientApiResponse {
+  id: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  phones: string;
+  userId: string;
+}
+
+const mapApiResponseToPatient = (data: PatientApiResponse): Patient => ({
+  id: data.id,
+  first_name: data.firstName,
+  last_name: data.lastName,
+  phones: data.phones || "",
+  address: data.address || "",
+  userId: data.userId,
+});
+
 interface AuthContextValue {
   patient: Patient | null;
   doctor: Doctor | null;
   admin: Employee | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  logout: () => void
+  logout: () => void;
+  user: AuthUser | null;
 }
-
-const MOCK_PATIENT: Patient = {
-  id: "dev-mock-patient-id-112233",
-  first_name: "Carlos",
-  last_name: "Mendoza",
-  phones: "+54 9 11 5555-4321",
-  address: "Av. Santa Fe 2530, Palermo, CABA",
-};
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
@@ -46,43 +59,132 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [doctor, setDoctor] = useState<Doctor | null>(null);
   const [admin, setAdmin] = useState<Employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<AuthUser | null>(null);
 
-
-  const logout = useCallback(() => {
-    localStorage.clear();
-    setPatient(null);
-    setDoctor(null);
-    setAdmin(null);
-  }, []);
-
-  useEffect(() => {
+  const logout = useCallback(async () => {
     try {
-      const storedPatient = localStorage.getItem("auth-patient");
-      const storedDoctor = localStorage.getItem("auth-doctor");
-      const storedAdmin = localStorage.getItem("auth-admin");
-      const explicitlyLoggedOut = localStorage.getItem("auth-logged-out") === "true";
-
-      if (storedPatient) {
-        setPatient(JSON.parse(storedPatient));
-      } else if (ENV === "DEV" && !explicitlyLoggedOut) {
-        localStorage.setItem("auth-patient", JSON.stringify(MOCK_PATIENT));
-        setPatient(MOCK_PATIENT);
+      const refreshToken = authStorage.getRefreshToken();
+      if (refreshToken) {
+        await apiClient.post("/auth/logout", {}, {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
       }
-
-      if (storedDoctor) setDoctor(JSON.parse(storedDoctor));
-      if (storedAdmin) setAdmin(JSON.parse(storedAdmin));
-
     } catch (error) {
-      console.error("Error loading session data, purging corrupted entries:", error);
-      localStorage.removeItem("auth-patient");
-      localStorage.removeItem("auth-doctor");
-      localStorage.removeItem("auth-admin");
+      console.error("Logout API call failed:", error);
     } finally {
-      setIsLoading(false);
+      authStorage.clearTokens();
+      setPatient(null);
+      setDoctor(null);
+      setAdmin(null);
+      setUser(null);
     }
   }, []);
 
-  const isAuthenticated = !!patient || !!doctor || !!admin;
+  useEffect(() => {
+    const loadUserFromStorage = async () => {
+      try {
+        if (authStorage.hasValidToken()) {
+          const storedUser = authStorage.getUser();
+          if (storedUser) {
+            setUser(storedUser);
+
+            if (storedUser.roles.includes("USER") || storedUser.roles.includes("PATIENT")) {
+              try {
+                const response = await apiClient.get<PatientApiResponse>("/patient/me");
+                setPatient(mapApiResponseToPatient(response.data));
+              } catch (error) {
+                console.error("Error fetching patient profile:", error);
+                setPatient(null);
+              }
+            }
+
+            if (storedUser.roles.includes("EMPLOYEE")) {
+              const doctorData: Doctor = {
+                id: storedUser.id,
+                firstName: storedUser.name.split(" ")[0] || storedUser.name,
+                lastName: storedUser.name.split(" ")[1] || "",
+                email: storedUser.email,
+                specialtyId: "",
+                professionalLicense: "",
+              };
+              setDoctor(doctorData);
+            }
+
+            if (storedUser.roles.includes("ADMIN")) {
+              const adminData: Employee = {
+                id: storedUser.id,
+                firstName: storedUser.name.split(" ")[0] || storedUser.name,
+                lastName: storedUser.name.split(" ")[1] || "",
+                email: storedUser.email,
+              };
+              setAdmin(adminData);
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error loading user data:", error);
+        authStorage.clearTokens();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const handleAuthChange = async (event: CustomEvent) => {
+      if (event.detail) {
+        const { user } = event.detail;
+        setUser(user);
+
+        if (user.roles.includes("USER") || user.roles.includes("PATIENT")) {
+          try {
+            const response = await apiClient.get<PatientApiResponse>("/patient/me");
+            setPatient(mapApiResponseToPatient(response.data));
+          } catch (error) {
+            console.error("Error fetching patient profile:", error);
+            setPatient(null);
+          }
+          setDoctor(null);
+          setAdmin(null);
+        } else if (user.roles.includes("EMPLOYEE")) {
+          const doctorData: Doctor = {
+            id: user.id,
+            firstName: user.name.split(" ")[0] || user.name,
+            lastName: user.name.split(" ")[1] || "",
+            email: user.email,
+            specialtyId: "",
+            professionalLicense: "",
+          };
+          setDoctor(doctorData);
+          setPatient(null);
+          setAdmin(null);
+        } else if (user.roles.includes("ADMIN")) {
+          const adminData: Employee = {
+            id: user.id,
+            firstName: user.name.split(" ")[0] || user.name,
+            lastName: user.name.split(" ")[1] || "",
+            email: user.email,
+          };
+          setAdmin(adminData);
+          setPatient(null);
+          setDoctor(null);
+        }
+      } else {
+        setUser(null);
+        setPatient(null);
+        setDoctor(null);
+        setAdmin(null);
+      }
+    };
+
+    loadUserFromStorage();
+
+    const unsubscribe = authStorage.subscribeToAuthChanges(handleAuthChange as EventListener);
+
+    return unsubscribe;
+  }, []);
+
+  const isAuthenticated = !!user && authStorage.hasValidToken();
 
   const value: AuthContextValue = {
     patient,
@@ -90,7 +192,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     admin,
     isLoading,
     isAuthenticated,
-    logout
+    logout,
+    user
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

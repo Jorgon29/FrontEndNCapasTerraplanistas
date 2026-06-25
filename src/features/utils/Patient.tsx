@@ -3,5 +3,6 @@ export default interface Patient {
     first_name: string,
     last_name: string,
     phones: string,
-    address: string 
+    address: string,
+    userId: string
 }

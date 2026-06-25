@@ -1,7 +1,7 @@
 import type { Appointment } from "@/features/utils/Appointment";
 import { useConsultation } from "../providers/ConsultationProvider";
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 
 export function useMedicalRecord(appointment: Appointment) {
     const { setMessage } = useConsultation();
@@ -36,17 +36,13 @@ export function useMedicalRecord(appointment: Appointment) {
             };
 
         const endpoint = isCompleted
-            ? `${BASE_URL}/api/medical-records/followup`
-            : `${BASE_URL}/api/medical-records`;
+            ? "/medical-records/followup"
+            : "/medical-records";
 
         try {
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
+            const response = await apiClient.post(endpoint, payload);
 
-            if (!response.ok) throw new Error("Error al guardar el historial médico");
+            if (response.status !== 200 && response.status !== 201) throw new Error("Error al guardar el historial médico");
             setMessage({ type: "success", text: "¡Historial Clínico guardado exitosamente!" });
         } catch (err: any) {
             setMessage({ type: "error", text: err.message || "Error de red" });

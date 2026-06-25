@@ -1,5 +1,10 @@
 // src/config.ts
-const BASE_URL = process.env.BUN_PUBLIC_API_URL ?? "http://localhost:8080";
-export default BASE_URL;
+// Bun injects BUN_PUBLIC_* vars at serve time via bunfig.toml
 
-export const ENV = process.env.BUN_PUBLIC_ENV ?? "DEV";
+const BASE_URL = "http://localhost:8080";
+const FRONTEND_REDIRECT_URI = "http://localhost:3000/auth/callback";
+const ENV = "DEV";
+const STRIPE_PUBLISHABLE_KEY = "pk_test_TYooMQauvdEDq54NiTphI7jx";
+
+export default BASE_URL;
+export { FRONTEND_REDIRECT_URI, ENV, STRIPE_PUBLISHABLE_KEY };

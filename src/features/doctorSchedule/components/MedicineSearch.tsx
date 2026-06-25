@@ -1,4 +1,4 @@
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 import { useEffect, useState } from "react";
 
 export interface Medicine {
@@ -36,10 +36,10 @@ function MedicineSearch({ onSelect, initialValue = "" }: MedicineSearchProps) {
 
         const delaySearch = setTimeout(async () => {
             try {
-                const response = await fetch(`${BASE_URL}/api/medicines?search=${encodeURIComponent(searchTerm)}`);
-                if (!response.ok) throw new Error();
-                const data = await response.json();
-                setMedicineResults(data);
+                const response = await apiClient.get(`/medicines?search=${encodeURIComponent(searchTerm)}`);
+                if (response.status === 200) {
+                    setMedicineResults(response.data || []);
+                }
             } catch {
                 setMedicineResults(
                     MOCK_MEDICINES.filter((med) =>

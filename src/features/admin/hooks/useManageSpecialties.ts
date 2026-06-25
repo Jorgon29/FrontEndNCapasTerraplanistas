@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 import type { Doctor, Speciality } from "@/features/utils/Employees";
 
 export interface SpecialtyResponse {
@@ -26,13 +26,11 @@ export function useManageSpecialties(doctor: Doctor) {
     useEffect(() => {
         const fetchSpecialties = async () => {
             try {
-                const res = await fetch(`${BASE_URL}/specialty`);
-                if (!res.ok) throw new Error("Error fetching specialties");
-                const json = await res.json();
-                setAvailableSpecialties(json.data || []);
+                const res = await apiClient.get("/specialty");
+                setAvailableSpecialties(res.data || []);
                 
-                if (json.data && json.data.length > 0) {
-                    setSelectedSpecialtyId(json.data[0].id);
+                if (res.data.data && res.data.data.length > 0) {
+                    setSelectedSpecialtyId(res.data.data[0].id);
                 }
             } catch (err) {
                 console.error(err);
@@ -68,15 +66,10 @@ export function useManageSpecialties(doctor: Doctor) {
         };
 
         try {
-            const response = await fetch(`${BASE_URL}/admin/employees/specialties`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
+            const response = await apiClient.post("/admin/employees/specialties", payload);
 
-            if (!response.ok) {
-                const errData = await response.json().catch(() => null);
-                throw new Error(errData?.message || "Error al asignar especialidad");
+            if (response.status !== 200 && response.status !== 201) {
+                throw new Error(response.data?.message || "Error al asignar especialidad");
             }
 
             const addedSpecCatalog = availableSpecialties.find(s => s.id === selectedSpecialtyId);
@@ -105,11 +98,9 @@ export function useManageSpecialties(doctor: Doctor) {
         if (!confirm("¿Está seguro de remover esta especialidad del médico?")) return;
         
         try {
-            const response = await fetch(`${BASE_URL}/admin/employees/${doctor.id}/specialties/${specialtyId}`, {
-                method: "DELETE"
-            });
+            const response = await apiClient.delete(`/admin/employees/${doctor.id}/specialties/${specialtyId}`);
 
-            if (!response.ok) throw new Error("Error removiendo especialidad");
+            if (response.status !== 200 && response.status !== 204) throw new Error("Error removiendo especialidad");
 
             setLocalDoctorSpecialties(prev => prev.filter(s => s.id !== specialtyId));
         } catch (err) {

@@ -1,30 +1,41 @@
 import { useState } from "react";
-import DoctorSearchPage from "../doctor/DoctorSearchPage";
+import PatientDoctorSearch from "./PatientDoctorSearch";
 import BookingModal from "@/features/search/Components/BookingModal";
-import type { Appointment } from "@/features/utils/Appointment";
-import type { Doctor } from "@/features/utils/Employees";
-import type { AppointmentRequest } from "@/features/utils/AppointmentRequest";
+import type { PublicDoctor } from "@/features/search/hooks/usePatientDoctors";
 
 function PatientSearchPage() {
-  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
-  const [doctorAppointments] = useState<Appointment[]>([]);
+  const [selectedDoctor, setSelectedDoctor] = useState<PublicDoctor | null>(null);
 
   return (
-    <div className="min-h-screen bg-background font-sans text-text">
-      <DoctorSearchPage
-        onInteract={(arg0: Doctor) => {setSelectedDoctor(arg0);}}
-      />
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-5xl mx-auto px-6 py-10">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-gray-800">
+            Buscar Doctores
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Busca por nombre o especialidad
+          </p>
+        </div>
 
-      {selectedDoctor && (
-        <BookingModal
-          doctor={selectedDoctor}
-          appointments={doctorAppointments}
-          onBook={(appointment: AppointmentRequest) => {
-            console.log("Booking appointment:", appointment);
+        <PatientDoctorSearch
+          onInteract={(doctor: PublicDoctor) => {
+            setSelectedDoctor(doctor);
           }}
-          onClose={() => setSelectedDoctor(null)}
         />
-      )}
+
+        {selectedDoctor && (
+          <BookingModal
+            doctor={selectedDoctor}
+            appointments={[]}
+            onBook={(appointment) => {
+              console.log("Appointment booked:", appointment);
+              setSelectedDoctor(null);
+            }}
+            onClose={() => setSelectedDoctor(null)}
+          />
+        )}
+      </div>
     </div>
   );
 }

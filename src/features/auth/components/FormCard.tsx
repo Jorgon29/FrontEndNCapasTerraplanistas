@@ -4,7 +4,7 @@ import { useFormSubmit } from "../hooks/useFormSubmit";
 import { FormContext } from "../context/FormContext";
 
 interface FormCardProps {
-  actionPath: string;                // e.g., "/api/auth/register"
+  actionPath: string;                // e.g., "/auth/register"
   onSuccess?: (data: any) => void;   // What to do after successful submission
   children: React.ReactNode;
   className?: string;

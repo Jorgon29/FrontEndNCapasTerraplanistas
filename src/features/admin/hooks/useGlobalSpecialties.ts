@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 import type { SpecialtyResponse } from "./useManageSpecialties";
 
 export function useGlobalSpecialties() {
@@ -12,10 +12,8 @@ export function useGlobalSpecialties() {
         setIsLoading(true);
         setError(null);
         try {
-            const res = await fetch(`${BASE_URL}/specialty`);
-            if (!res.ok) throw new Error("Error fetching specialties");
-            const json = await res.json();
-            setSpecialties(json.data || []);
+            const res = await apiClient.get("/specialty");
+            setSpecialties(res.data || []);
         } catch (err: any) {
             console.error(err);
             setError("No se pudo cargar el catálogo de especialidades.");
@@ -32,17 +30,12 @@ export function useGlobalSpecialties() {
         setIsSubmitting(true);
         setError(null);
         try {
-            const res = await fetch(`${BASE_URL}/specialty`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ code, name }),
-            });
+            const res = await apiClient.post("/specialty", { code, name });
 
-            if (!res.ok) {
-                const errData = await res.json().catch(() => null);
-                throw new Error(errData?.message || "Error al crear la especialidad");
+            if (res.status !== 200 && res.status !== 201) {
+                throw new Error(res.data?.message || "Error al crear la especialidad");
             }
-            
+
             await fetchSpecialties();
             return true;
         } catch (err: any) {
@@ -58,11 +51,9 @@ export function useGlobalSpecialties() {
         setIsSubmitting(true);
         setError(null);
         try {
-            const res = await fetch(`${BASE_URL}/specialty/${id}`, {
-                method: "DELETE",
-            });
+            const res = await apiClient.delete(`/specialty/${id}`);
 
-            if (!res.ok) throw new Error("Error al eliminar la especialidad. Verifique que no esté asignada a médicos.");
+            if (res.status !== 200 && res.status !== 204) throw new Error("Error al eliminar la especialidad. Verifique que no esté asignada a médicos.");
 
             setSpecialties(prev => prev.filter(s => s.id !== id));
             return true;

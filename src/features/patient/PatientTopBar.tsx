@@ -131,7 +131,7 @@ export default function PatientTopBar() {
                         border-surface-alt
                         bg-surface
                     "
-                >navigate
+                >
                     <div className="flex flex-col p-3">
 
                         <Link

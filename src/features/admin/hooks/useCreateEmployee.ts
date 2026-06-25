@@ -1,25 +1,30 @@
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 
 export type IdType = "DNI" | "PASSPORT";
+export type RoleType = "EMPLOYEE" | "ADMIN";
 
 export interface EmployeeRequest {
+  email: string;
   firstName: string;
   lastName: string;
   idNumber: string;
   idType: IdType;
   address: string;
   phones: string;
+  role: RoleType;
 }
 
 export function useCreateEmployee() {
   const [formData, setFormData] = useState<EmployeeRequest>({
+    email: "",
     firstName: "",
     lastName: "",
     idNumber: "",
     idType: "DNI",
     address: "",
     phones: "",
+    role: "EMPLOYEE",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,32 +45,38 @@ export function useCreateEmployee() {
     setSuccess(false);
 
     try {
-      const response = await fetch(`${BASE_URL}/admin/employees`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const payload = {
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        idNumber: formData.idNumber,
+        idType: formData.idType,
+        address: formData.address,
+        phones: formData.phones,
+        role: formData.role,
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || "Error al crear el empleado.");
+      const response = await apiClient.post("/admin/employees", payload);
+
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error(response.data?.message || "Error al crear el empleado.");
       }
 
       setSuccess(true);
       setFormData({
+        email: "",
         firstName: "",
         lastName: "",
         idNumber: "",
         idType: "DNI",
         address: "",
         phones: "",
+        role: "EMPLOYEE",
       });
-      
+
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Ocurrió un error inesperado de red.");
+      setError(err.response?.data?.message || err.message || "Ocurrió un error inesperado de red.");
     } finally {
       setIsSubmitting(false);
     }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 
 interface RepresentativeFormData {
   email: string;
@@ -52,30 +52,21 @@ export default function RepresentativeModal({
 
     setSubmitting(true);
     try {
-      const userRes = await fetch(`${BASE_URL}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: form.email,
-          username: form.username,
-          password: form.password,
-          roleCode: "PATIENT",
-        }),
+      const userRes = await apiClient.post("/auth/register", {
+        email: form.email,
+        username: form.username,
+        password: form.password,
+        roleCode: "PATIENT",
       });
-      if (!userRes.ok) throw new Error("No se pudo crear la cuenta del representante.");
-      const userData = await userRes.json();
-      const representativeUserId = userData.data.id;
+      if (userRes.status !== 200 && userRes.status !== 201) throw new Error("No se pudo crear la cuenta del representante.");
+      const representativeUserId = userRes.data.data.id;
 
-      const linkRes = await fetch(`${BASE_URL}/patient-representatives`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          patientId,
-          representativeUserId,
-          relationshipType: form.relationshipType,
-        }),
+      const linkRes = await apiClient.post("/patient-representatives", {
+        patientId,
+        representativeUserId,
+        relationshipType: form.relationshipType,
       });
-      if (!linkRes.ok) throw new Error("No se pudo vincular al representante con el paciente.");
+      if (linkRes.status !== 200 && linkRes.status !== 201) throw new Error("No se pudo vincular al representante con el paciente.");
 
       onSuccess();
     } catch (err: any) {

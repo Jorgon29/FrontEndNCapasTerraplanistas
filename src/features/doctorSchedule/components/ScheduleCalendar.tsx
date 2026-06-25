@@ -5,7 +5,7 @@ import { enUS } from "date-fns/locale/en-US";
 import type { Appointment } from "@/features/utils/Appointment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 
 const locales = { "en-US": enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -41,11 +41,10 @@ export default function ScheduleCalendar({ endpoint, eventTitle, Modal }: Schedu
     const fetch_ = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${BASE_URL}${endpoint}`, {
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!res.ok) throw new Error();
-        setAppointments(await res.json());
+        const res = await apiClient.get(endpoint);
+        const data = res.data;
+        const aptArray = data?.content || data || [];
+        setAppointments(aptArray);
         setIsUsingMock(false);
       } catch {
         setAppointments(DUMMY_APPOINTMENTS);

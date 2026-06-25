@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideo, faFileMedical, faPills, faNotesMedical, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faVideo, faFileMedical, faPills, faNotesMedical, faXmark, faSpinner, faWarning } from "@fortawesome/free-solid-svg-icons";
 import type { Appointment } from "@/features/utils/Appointment";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
+import { useCancelAppointment } from "@/features/payment";
 import type MedicalRecord from "../utils/MedicalRecord";
 import type Prescription from "../utils/Prescription";
 
@@ -33,7 +34,22 @@ function Field({ label, value }: { label: string; value?: string }) {
 }
 
 
-function ActiveView({ appointment }: { appointment: Appointment }) {
+function ActiveView({ appointment, onCancel }: { appointment: Appointment; onCancel: () => void }) {
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const cancelAppointment = useCancelAppointment();
+
+  const handleCancel = async () => {
+    if (!appointment.id) return;
+    try {
+      await cancelAppointment.mutateAsync(appointment.id);
+      setShowCancelConfirm(false);
+      onCancel();
+    } catch (error) {
+      console.error("Failed to cancel appointment:", error);
+      alert("Error al cancelar la cita. Por favor intenta de nuevo.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center flex-1 gap-6 p-8">
       <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-primary text-3xl">
@@ -63,6 +79,48 @@ function ActiveView({ appointment }: { appointment: Appointment }) {
       >
         <FontAwesomeIcon icon={faVideo} /> Unirse a la videollamada
       </a>
+
+      {!showCancelConfirm ? (
+        <button
+          onClick={() => setShowCancelConfirm(true)}
+          className="text-sm text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+        >
+          Cancelar cita
+        </button>
+      ) : (
+        <div className="w-full max-w-sm rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-center">
+          <p className="text-sm text-red-400 mb-3 flex items-center justify-center gap-2">
+            <FontAwesomeIcon icon={faWarning} />
+            ¿Estás seguro de cancelar?
+          </p>
+          <p className="text-xs text-text-muted mb-3">
+            Se realizará un reembolso del 80% del monto pagado.
+          </p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowCancelConfirm(false)}
+              className="flex-1 bg-surface-alt text-text rounded-lg py-2 text-xs font-medium hover:bg-surface-alt/80 transition-colors cursor-pointer"
+            >
+              No, mantener cita
+            </button>
+            <button
+              onClick={handleCancel}
+              disabled={cancelAppointment.isPending}
+              className="flex-1 bg-red-500 text-white rounded-lg py-2 text-xs font-medium hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1"
+            >
+              {cancelAppointment.isPending ? (
+                <>
+                  <FontAwesomeIcon icon={faSpinner} spin />
+                  Cancelando...
+                </>
+              ) : (
+                "Sí, cancelar"
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-sm rounded-xl border border-surface-alt bg-surface p-3">
         <p className="text-[10px] uppercase tracking-wider text-text-muted mb-1">Enlace alternativo</p>
         <a
@@ -89,13 +147,12 @@ function CompletedView({ appointment }: { appointment: Appointment }) {
       setLoading(true);
       try {
         const [recRes, preRes] = await Promise.all([
-          fetch(`${BASE_URL}/api/medical-records/appointment/${appointment.id}`),
-          fetch(`${BASE_URL}/api/prescriptions/appointment/${appointment.id}`),
+          apiClient.get(`/medical-records/appointment/${appointment.id}`),
+          apiClient.get(`/prescriptions/appointment/${appointment.id}`),
         ]);
-        if (recRes.ok) setRecord(await recRes.json());
-        if (preRes.ok) setPrescriptions(await preRes.json());
+        if (recRes.status === 200) setRecord(recRes.data);
+        if (preRes.status === 200) setPrescriptions(preRes.data || []);
       } catch {
-        // backend unavailable — show empty state gracefully
       } finally {
         setLoading(false);
       }
@@ -192,7 +249,7 @@ export default function PatientConsultationModal({ appointment, onClose }: Patie
 
         {isCompleted
           ? <CompletedView appointment={appointment} />
-          : <ActiveView appointment={appointment} />
+          : <ActiveView appointment={appointment} onCancel={onClose} />
         }
 
       </div>

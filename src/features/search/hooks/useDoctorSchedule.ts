@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import BASE_URL, { ENV } from "@/config/config";
+import apiClient from "@/lib/apiClient";
+import { ENV } from "@/config/config";
 import { DayOfTheWeek, englishStringToDay } from "@/features/utils/DaysOfTheWeek";
 
 export interface OfficeHours {
@@ -55,18 +56,9 @@ export function useDoctorSchedule() {
     ];
 
     try {
-      const response = await fetch(`${BASE_URL}/availability/${doctorId}`, {
-        method: "GET", headers: { "Content-Type": "application/json" }
-      });
+      const response = await apiClient.get(`/availability/${doctorId}`);
 
-      if (!response.ok) throw new Error(`Server Error: ${response.status} ${response.statusText}`);
-      
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("El servidor no respondió con JSON válido.");
-      }
-
-      const body = await response.json();
+      const body = response.data;
       const rawData = body.data;
 
       if (!rawData) {
@@ -75,7 +67,7 @@ export function useDoctorSchedule() {
       }
 
       const itemsArray = Array.isArray(rawData) ? rawData : [rawData];
-      const mappedSchedule: OfficeHours[] = itemsArray.map((item) => ({
+      const mappedSchedule: OfficeHours[] = itemsArray.map((item: any) => ({
         id: item.id,
         employeeId: item.employeeId,
         specialtyId: item.specialtyId,
@@ -105,23 +97,10 @@ export function useDoctorSchedule() {
     setIsAppointmentsLoading(true);
     setAppointmentsError(null);
 
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
     try {
-      const response = await fetch(`${BASE_URL}/appointments/employee/${doctorId}`, {
-        method: "GET", headers: { "Content-Type": "application/json" }
-      });
+      const response = await apiClient.get(`/appointments/employee/${doctorId}`);
 
-      if (!response.ok) throw new Error(`Server Error: ${response.status} ${response.statusText}`);
-
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        throw new TypeError("El servidor no respondió con JSON válido.");
-      }
-
-      const body = await response.json();
+      const body = response.data;
       const rawData = body.data;
 
       if (!rawData) {
@@ -131,7 +110,7 @@ export function useDoctorSchedule() {
 
       const itemsArray = Array.isArray(rawData) ? rawData : [rawData];
       
-      const mappedAppointments: Appointment[] = itemsArray.map((item) => ({
+      const mappedAppointments: Appointment[] = itemsArray.map((item: any) => ({
         id: item.id,
         googleEventId: item.googleEventId,
         status: item.status,

@@ -16,7 +16,7 @@ export default function CreateDoctorPage() {
               <FontAwesomeIcon icon={faUserMd} className="text-xl" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-text">Registrar Nuevo Médico</h1>
+              <h1 className="text-xl font-bold text-text">Registrar Nuevo Profesional</h1>
               <p className="text-sm text-text-muted mt-1">
                 Complete la información personal para dar de alta a un nuevo profesional.
               </p>
@@ -34,13 +34,46 @@ export default function CreateDoctorPage() {
         {success && (
           <div className="mx-8 mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl flex items-start gap-3 text-green-600">
             <FontAwesomeIcon icon={faCheckCircle} className="mt-0.5" />
-            <p className="text-sm font-medium">¡Médico registrado exitosamente!</p>
+            <p className="text-sm font-medium">¡Profesional registrado exitosamente!</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="p-8 flex flex-col gap-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
+
+            <div>
+              <label htmlFor="email" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
+                Correo Electrónico
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Ej. usuario@clinic.com"
+                className="w-full bg-background border border-surface-alt rounded-xl p-3 text-sm text-text focus:outline-none focus:border-primary transition-colors"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="role" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
+                Rol
+              </label>
+              <select
+                id="role"
+                name="role"
+                required
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full bg-background border border-surface-alt rounded-xl p-3 text-sm text-text focus:outline-none focus:border-primary transition-colors cursor-pointer"
+              >
+                <option value="EMPLOYEE">Médico</option>
+                <option value="ADMIN">Administrador</option>
+              </select>
+            </div>
+
             <div>
               <label htmlFor="firstName" className="block text-xs font-bold uppercase tracking-wider mb-2 text-text/70">
                 Nombres
@@ -152,7 +185,7 @@ export default function CreateDoctorPage() {
                   Guardando...
                 </span>
               ) : (
-                "Registrar Médico"
+                "Registrar Profesional"
               )}
             </button>
           </div>

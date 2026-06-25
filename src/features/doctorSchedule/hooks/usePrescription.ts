@@ -1,7 +1,7 @@
 import type { Appointment } from "@/features/utils/Appointment";
 import { useConsultation } from "../providers/ConsultationProvider";
 import { useState } from "react";
-import BASE_URL from "@/config/config";
+import apiClient from "@/lib/apiClient";
 
 export function usePrescription(appointment: Appointment) {
     const { setMessage } = useConsultation();
@@ -27,13 +27,9 @@ export function usePrescription(appointment: Appointment) {
         }
 
         try {
-            const response = await fetch(`${BASE_URL}/api/prescriptions`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
+            const response = await apiClient.post("/prescriptions", payload);
 
-            if (!response.ok) throw new Error("Error al emitir la receta");
+            if (response.status !== 200 && response.status !== 201) throw new Error("Error al emitir la receta");
             setMessage({ type: "success", text: "¡Receta médica emitida y firmada!" });
         } catch (err: any) {
             setMessage({ type: "error", text: err.message || "Error de red" });

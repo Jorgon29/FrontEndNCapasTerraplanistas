@@ -8,7 +8,7 @@ function PatientSchedulePage() {
 
     return (
         <ScheduleCalendar
-            endpoint={`/api/appointments/patient/${patient?.id}`}
+            endpoint={`/appointments/patient/${patient?.id}`}
             eventTitle={(apt) => `Dr. ${apt.doctor_name} - ${apt.notes || "Cita"}`}
             Modal={PatientConsultationModal}
         />
