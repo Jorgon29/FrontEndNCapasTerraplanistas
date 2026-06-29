@@ -3,13 +3,16 @@ import apiClient from "@/lib/apiClient";
 import { Appointment } from "@/features/utils/Appointment";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Calendar, Clock, CheckCircle, CalendarDays, Search, User, Loader2 } from "lucide-react";
+import { Calendar, Clock, CheckCircle, CalendarDays, Search, User, Loader2, ShoppingCart } from "lucide-react";
+import { usePendingAppointments } from "@/features/payment";
 
 function PatientHomePage() {
     const { user } = useAuth();
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { data: pendingAppointments } = usePendingAppointments();
+    const pendingCount = pendingAppointments?.length || 0;
 
     useEffect(() => {
         const fetchAppointments = async () => {
@@ -140,6 +143,31 @@ function PatientHomePage() {
                     </div>
                 </div>
 
+                {pendingCount > 0 && (
+                    <div className="bg-warning/10 rounded-2xl border border-warning/30 p-4 md:p-6">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 rounded-xl bg-warning/20">
+                                    <ShoppingCart className="h-6 w-6 text-warning" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-text">Pagos Pendientes</h3>
+                                    <p className="text-sm text-text-muted">
+                                        Tienes {pendingCount} cita{pendingCount !== 1 ? "s" : ""} pendiente{pendingCount !== 1 ? "s" : ""} de pago
+                                    </p>
+                                </div>
+                            </div>
+                            <Link
+                                to="/patient/cart"
+                                className="flex items-center gap-2 bg-warning text-white px-4 py-2.5 rounded-xl hover:bg-warning-dark transition-colors font-medium"
+                            >
+                                <ShoppingCart className="h-4 w-4" />
+                                Ver Carrito
+                            </Link>
+                        </div>
+                    </div>
+                )}
+
                 <div className="bg-surface rounded-2xl border border-surface-alt p-4 md:p-6 shadow-sm">
                     <h2 className="text-lg font-semibold text-text mb-4">Acciones Rápidas</h2>
                     <div className="flex flex-wrap gap-3">
@@ -156,6 +184,13 @@ function PatientHomePage() {
                         >
                             <Calendar className="h-4 w-4" />
                             Ver Calendario
+                        </Link>
+                        <Link
+                            to="/patient/cart"
+                            className="flex items-center gap-2 px-4 py-2.5 bg-surface-alt text-text rounded-xl hover:bg-gray-200 transition-colors border border-surface-alt"
+                        >
+                            <ShoppingCart className="h-4 w-4" />
+                            Mis Pagos
                         </Link>
                         <Link
                             to="/patient/profile"

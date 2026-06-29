@@ -38,6 +38,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   logout: () => void;
   user: AuthUser | null;
+  stripeEnabled: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -60,6 +61,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [admin, setAdmin] = useState<Employee | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [stripeEnabled, setStripeEnabled] = useState<boolean>(true);
 
   const logout = useCallback(async () => {
     try {
@@ -89,6 +91,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           const storedUser = authStorage.getUser();
           if (storedUser) {
             setUser(storedUser);
+            if (storedUser.features?.stripeEnabled !== undefined) {
+              setStripeEnabled(storedUser.features.stripeEnabled);
+            }
 
             if (storedUser.roles.includes("USER") || storedUser.roles.includes("PATIENT")) {
               try {
@@ -135,6 +140,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (event.detail) {
         const { user } = event.detail;
         setUser(user);
+        if (user.features?.stripeEnabled !== undefined) {
+          setStripeEnabled(user.features.stripeEnabled);
+        } else {
+          setStripeEnabled(true);
+        }
 
         if (user.roles.includes("USER") || user.roles.includes("PATIENT")) {
           try {
@@ -174,6 +184,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setPatient(null);
         setDoctor(null);
         setAdmin(null);
+        setStripeEnabled(true);
       }
     };
 
@@ -193,7 +204,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isLoading,
     isAuthenticated,
     logout,
-    user
+    user,
+    stripeEnabled
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

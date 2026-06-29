@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVideo, faFileMedical, faPills, faNotesMedical, faXmark, faSpinner, faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faVideo, faFileMedical, faPills, faNotesMedical, faXmark, faSpinner, faWarning, faCheck } from "@fortawesome/free-solid-svg-icons";
 import type { Appointment } from "@/features/utils/Appointment";
 import apiClient from "@/lib/apiClient";
 import { useCancelAppointment } from "@/features/payment";
@@ -141,6 +141,7 @@ function CompletedView({ appointment }: { appointment: Appointment }) {
   const [record, setRecord] = useState<MedicalRecord | null>(null);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [loading, setLoading] = useState(true);
+  const [dispensingId, setDispensingId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSummary = async () => {
@@ -150,8 +151,8 @@ function CompletedView({ appointment }: { appointment: Appointment }) {
           apiClient.get(`/medical-records/appointment/${appointment.id}`),
           apiClient.get(`/prescriptions/appointment/${appointment.id}`),
         ]);
-        if (recRes.status === 200) setRecord(recRes.data);
-        if (preRes.status === 200) setPrescriptions(preRes.data || []);
+        if (recRes.status === 200) setRecord(recRes.data?.data);
+        if (preRes.status === 200) setPrescriptions(preRes.data?.data || []);
       } catch {
       } finally {
         setLoading(false);
@@ -159,6 +160,25 @@ function CompletedView({ appointment }: { appointment: Appointment }) {
     };
     fetchSummary();
   }, [appointment.id]);
+
+  const handleDispense = async (prescriptionId: string) => {
+    if (!confirm("¿Dispensar esta receta?")) return;
+    setDispensingId(prescriptionId);
+    try {
+      const res = await apiClient.patch(`/prescriptions/${prescriptionId}/dispense`);
+      if (res.status === 200) {
+        setPrescriptions(prev => prev.map(p =>
+          p.id === prescriptionId
+            ? { ...p, usageCount: res.data.data.usageCount }
+            : p
+        ));
+      }
+    } catch {
+      alert("Error al dispensar la receta");
+    } finally {
+      setDispensingId(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -199,15 +219,41 @@ function CompletedView({ appointment }: { appointment: Appointment }) {
           <p className="text-sm text-text-muted italic">No se emitieron recetas en esta consulta.</p>
         ) : (
           <div className="space-y-3">
-            {prescriptions.map((p) => (
-              <div key={p.id} className="rounded-lg border border-surface-alt p-3 space-y-1">
-                <p className="text-sm font-semibold text-text">{p.medicineName}</p>
-                <p className="text-xs text-text-muted">{p.dosageInstructions}</p>
-                <p className="text-[10px] uppercase tracking-wider text-accent">
-                  Usos disponibles: {p.maxUsages}
-                </p>
-              </div>
-            ))}
+            {prescriptions.map((p) => {
+              const remaining = (p.maxUsages || 3) - (p.usageCount || 0);
+              const isExhausted = remaining <= 0;
+
+              return (
+                <div key={p.id} className="rounded-lg border border-surface-alt p-3 space-y-2">
+                  <p className="text-sm font-semibold text-text">
+                    {p.medicineSnapshot?.brandName || p.medicineName || "Medicamento"}
+                  </p>
+                  <p className="text-xs text-text-muted">{p.dosageInstructions}</p>
+                  <div className="flex items-center justify-between">
+                    <p className={`text-[10px] font-bold uppercase tracking-wider ${isExhausted ? "text-red-500" : "text-accent"}`}>
+                      {remaining} de {p.maxUsages || 3} usos disponibles
+                    </p>
+                    <button
+                      onClick={() => handleDispense(p.id)}
+                      disabled={isExhausted || dispensingId === p.id}
+                      className={`text-xs px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                        isExhausted
+                          ? "bg-surface-alt text-text-muted cursor-not-allowed"
+                          : "bg-primary/10 text-primary hover:bg-primary/20"
+                      }`}
+                    >
+                      {dispensingId === p.id ? (
+                        <FontAwesomeIcon icon={faSpinner} spin />
+                      ) : isExhausted ? (
+                        "Sin usos"
+                      ) : (
+                        <><FontAwesomeIcon icon={faCheck} className="mr-1" /> Usar</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>

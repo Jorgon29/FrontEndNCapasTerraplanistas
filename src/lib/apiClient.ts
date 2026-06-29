@@ -36,8 +36,9 @@ apiClient.interceptors.response.use(
         }
         return apiClient(originalRequest);
       } catch (refreshError) {
+        const isExpired = error.response?.data?.expired === true;
         authStorage.clearTokens();
-        window.location.href = "/auth/login";
+        window.location.href = isExpired ? "/" : "/auth/login";
         return Promise.reject(refreshError);
       }
     }

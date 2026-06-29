@@ -3,7 +3,7 @@ import apiClient from "@/lib/apiClient";
 import { Appointment } from "@/features/utils/Appointment";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Calendar, Clock, CheckCircle, CalendarDays, User, Loader2, Monitor, FileMedical, Pill } from "lucide-react";
+import { Calendar, Clock, CheckCircle, CalendarDays, User, Loader2, Monitor, Clipboard, Pill } from "lucide-react";
 
 interface DoctorStats {
     todayCount: number;
@@ -200,7 +200,7 @@ function DoctorHomePage() {
                             to={`/doctor/schedule/${doctorId}`}
                             className="flex items-center gap-2 px-4 py-2.5 bg-success text-white rounded-xl hover:opacity-90 transition-colors"
                         >
-                            <FileMedical className="h-4 w-4" />
+                            <Clipboard className="h-4 w-4" />
                             Completar Consulta
                         </Link>
                         <button
@@ -281,7 +281,7 @@ function DoctorHomePage() {
                         <div className="p-4 rounded-xl border border-surface-alt hover:bg-surface-alt/30 transition-colors">
                             <div className="flex items-center gap-3 mb-2">
                                 <div className="p-2 rounded-lg bg-primary/10">
-                                    <FileMedical className="h-5 w-5 text-primary" />
+                                    <Clipboard className="h-5 w-5 text-primary" />
                                 </div>
                                 <h3 className="font-medium text-text">Historia Clínica</h3>
                             </div>

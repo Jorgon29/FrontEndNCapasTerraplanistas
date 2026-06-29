@@ -21,26 +21,18 @@ export function useMedicalRecord(appointment: Appointment) {
 
         const isCompleted = appointment.status === "COMPLETED";
 
-        const payload = isCompleted
-            ? {
-                appointment: { id: appointment.id },
-                followUpNote: form.followUpNote,
-                ...(form.diagnosisCode && { diagnosisCode: form.diagnosisCode }),
-                ...(form.clinicalNotes && { clinicalNotes: form.clinicalNotes }),
-            }
-            : {
-                patient: { id: appointment.patient_id },
-                appointment: { id: appointment.id },
-                employee: { id: appointment.employee_id },
-                ...form,
-            };
-
-        const endpoint = isCompleted
-            ? "/medical-records/followup"
-            : "/medical-records";
+        const payload = {
+            patientId: appointment.patient_id,
+            appointmentId: appointment.id,
+            employeeId: appointment.employee_id,
+            diagnosisCode: form.diagnosisCode,
+            diagnosisDescription: form.diagnosisDescription,
+            clinicalNotes: form.clinicalNotes,
+            physicalExamination: form.physicalExamination,
+        };
 
         try {
-            const response = await apiClient.post(endpoint, payload);
+            const response = await apiClient.post("/medical-records", payload);
 
             if (response.status !== 200 && response.status !== 201) throw new Error("Error al guardar el historial médico");
             setMessage({ type: "success", text: "¡Historial Clínico guardado exitosamente!" });

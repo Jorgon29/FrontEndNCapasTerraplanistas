@@ -2,11 +2,15 @@ import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Logo } from "../landing/components/NavBar";
 import { useAuth } from "../auth/providers/AuthProvider";
+import { usePendingAppointments } from "@/features/payment";
+import { ShoppingCart } from "lucide-react";
 
 export default function PatientTopBar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
     const { logout } = useAuth();
+    const { data: pendingAppointments } = usePendingAppointments();
+    const pendingCount = pendingAppointments?.length || 0;
     const handleLogout = () => {
         logout();
         navigate("/");
@@ -70,6 +74,54 @@ export default function PatientTopBar() {
                         "
                     >
                         Perfil
+                    </Link>
+
+                    <Link
+                        to="/patient/medical-records"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Registros
+                    </Link>
+
+                    <Link
+                        to="/patient/prescriptions"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Recetas
+                    </Link>
+
+                    <Link
+                        to="/patient/cart"
+                        className="
+                            relative
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        <ShoppingCart className="h-5 w-5" />
+                        {pendingCount > 0 && (
+                            <span className="
+                                absolute -top-2 -right-2
+                                bg-danger text-white text-xs
+                                rounded-full h-5 w-5
+                                flex items-center justify-center
+                                font-bold
+                            ">
+                                {pendingCount > 9 ? "9+" : pendingCount}
+                            </span>
+                        )}
                     </Link>
 
                     <button
@@ -168,6 +220,56 @@ export default function PatientTopBar() {
                             "
                         >
                             Perfil
+                        </Link>
+
+                        <Link
+                            to="/patient/medical-records"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                            "
+                        >
+                            Registros
+                        </Link>
+
+                        <Link
+                            to="/patient/prescriptions"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                            "
+                        >
+                            Recetas
+                        </Link>
+
+                        <Link
+                            to="/patient/cart"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                                flex items-center justify-between
+                            "
+                        >
+                            <span className="flex items-center gap-2">
+                                <ShoppingCart className="h-5 w-5" />
+                                Carrito
+                            </span>
+                            {pendingCount > 0 && (
+                                <span className="
+                                    bg-danger text-white text-xs
+                                    rounded-full h-5 w-5
+                                    flex items-center justify-center
+                                    font-bold
+                                ">
+                                    {pendingCount > 9 ? "9+" : pendingCount}
+                                </span>
+                            )}
                         </Link>
 
                         <button

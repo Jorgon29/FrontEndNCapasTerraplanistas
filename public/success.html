@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procesando Pago...</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: left;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e5e5e5;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        p {
+            color: #666;
+            margin: 0;
+        }
+        .error { color: #dc2626; }
+        .success { color: #16a34a; }
+        .debug { font-family: monospace; font-size: 12px; background: #f0f0f0; padding: 10px; margin-top: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="spinner"></div>
+        <p>Procesando tu pago...</p>
+    </div>
+    <script>
+        (async function() {
+            var container = document.getElementById('container');
+
+            // Debug info
+            var debugInfo = 'URL: ' + window.location.href + '\n';
+            debugInfo += 'origin: ' + window.location.origin + '\n';
+            debugInfo += 'pathname: ' + window.location.pathname + '\n';
+            debugInfo += 'search: ' + window.location.search + '\n';
+            debugInfo += 'hash: ' + window.location.hash + '\n';
+
+            var params = new URLSearchParams(window.location.search);
+            var sessionId = params.get('session_id');
+            var redirectStatus = params.get('redirect_status');
+            var appointmentId = params.get('appointment_id');
+
+            debugInfo += 'session_id: ' + sessionId + '\n';
+            debugInfo += 'redirect_status: ' + redirectStatus + '\n';
+            debugInfo += 'appointment_id: ' + appointmentId + '\n';
+
+            container.innerHTML = '<div class="spinner"></div><p>Procesando tu pago...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+
+            if (redirectStatus === 'succeeded' && sessionId) {
+                try {
+                    var confirmResponse = await fetch('/api/appointments/checkout-session/' + sessionId + '/confirm', {
+                        method: 'POST'
+                    });
+
+                    if (confirmResponse.ok) {
+                        container.innerHTML = '<p class="success">¡Pago confirmado!</p><p>Redirigiendo...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+                        setTimeout(function() {
+                            window.location.replace('/#/patient?payment=success');
+                        }, 1500);
+                    } else {
+                        var errorData = await confirmResponse.json().catch(() => ({}));
+                        var errorMsg = errorData.message || 'Error al confirmar el pago';
+                        container.innerHTML = '<p class="error">Error: ' + errorMsg + '</p><p>Redirigiendo...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+                        setTimeout(function() {
+                            window.location.replace('/#/patient?payment=failed');
+                        }, 3000);
+                    }
+                } catch (e) {
+                    container.innerHTML = '<p class="error">Error de conexión: ' + e.message + '</p><p>Redirigiendo...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+                    setTimeout(function() {
+                        window.location.replace('/#/patient?payment=failed');
+                    }, 3000);
+                }
+            } else if (redirectStatus === 'canceled' || redirectStatus === 'failed') {
+                container.innerHTML = '<p>Pago cancelado</p><p>Redirigiendo al carrito...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+                setTimeout(function() {
+                    window.location.replace('/#/patient/cart');
+                }, 1500);
+            } else {
+                container.innerHTML = '<p class="error">Parámetros inválidos o faltantes</p><p>Redirigiendo al carrito...</p><div class="debug"><pre>' + debugInfo + '</pre></div>';
+                setTimeout(function() {
+                    window.location.replace('/#/patient/cart');
+                }, 5000);
+            }
+        })();
+    </script>
+</body>
+</html>

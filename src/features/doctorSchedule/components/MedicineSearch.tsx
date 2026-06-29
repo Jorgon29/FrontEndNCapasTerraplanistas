@@ -4,16 +4,9 @@ import { useEffect, useState } from "react";
 export interface Medicine {
     id: string;
     name: string;
-    category: string;
+    genericName: string;
+    atcCode: string;
 }
-
-const MOCK_MEDICINES: Medicine[] = [
-    { id: "101", name: "Amlodipino 5mg (Tableta)", category: "Cardio" },
-    { id: "102", name: "Paracetamol 500mg (Tableta)", category: "Analgésico" },
-    { id: "103", name: "Metformina 850mg (Tableta)", category: "Antidiabético" },
-    { id: "104", name: "Amoxicilina 500mg (Cápsula)", category: "Antibiótico" },
-    { id: "105", name: "Losartán 500mg (Tableta)", category: "Cardio" },
-];
 
 interface MedicineSearchProps {
     onSelect: (medicine: Medicine) => void;
@@ -25,6 +18,7 @@ function MedicineSearch({ onSelect, initialValue = "" }: MedicineSearchProps) {
     const [medicineResults, setMedicineResults] = useState<Medicine[]>([]);
     const [selectedMedicine, setSelectedMedicine] = useState<Medicine | null>(null);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
 
     useEffect(() => {
         if (!searchTerm.trim()) {
@@ -35,17 +29,20 @@ function MedicineSearch({ onSelect, initialValue = "" }: MedicineSearchProps) {
         if (selectedMedicine && searchTerm === selectedMedicine.name) return;
 
         const delaySearch = setTimeout(async () => {
+            setIsSearching(true);
             try {
-                const response = await apiClient.get(`/medicines?search=${encodeURIComponent(searchTerm)}`);
-                if (response.status === 200) {
-                    setMedicineResults(response.data || []);
-                }
+                const res = await apiClient.get(`/medicines?search=${encodeURIComponent(searchTerm)}&size=20`);
+                const data = res.data?.data || [];
+                setMedicineResults(data.map((med: any) => ({
+                    id: med.id,
+                    name: med.brandName,
+                    genericName: med.genericName || "",
+                    atcCode: med.atcCode || ""
+                })));
             } catch {
-                setMedicineResults(
-                    MOCK_MEDICINES.filter((med) =>
-                        med.name.toLowerCase().includes(searchTerm.toLowerCase())
-                    )
-                );
+                setMedicineResults([]);
+            } finally {
+                setIsSearching(false);
             }
         }, 300);
 
@@ -83,19 +80,24 @@ function MedicineSearch({ onSelect, initialValue = "" }: MedicineSearchProps) {
                     {medicineResults.map((med) => (
                         <li
                             key={med.id}
-                            className="p-2.5 text-sm hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer flex justify-between items-center"
+                            className="p-2.5 text-sm hover:bg-primary/10 hover:text-primary transition-colors cursor-pointer flex flex-col gap-0.5"
                             onMouseDown={() => handleSelect(med)}
                         >
                             <span className="font-medium">{med.name}</span>
-                            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-wide">
-                                {med.category}
-                            </span>
+                            <div className="flex gap-2 items-center">
+                                {med.genericName && (
+                                    <span className="text-[10px] text-text-muted">{med.genericName}</span>
+                                )}
+                                <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-wide">
+                                    {med.atcCode}
+                                </span>
+                            </div>
                         </li>
                     ))}
                 </ul>
             )}
 
-            {showDropdown && searchTerm && medicineResults.length === 0 && (
+            {showDropdown && searchTerm && medicineResults.length === 0 && !isSearching && (
                 <div className="absolute z-50 w-full left-0 mt-1 bg-background border border-primary-light/20 rounded-xl p-3 text-xs text-text/50 italic shadow-xl">
                     No se encontraron coincidencias.
                 </div>

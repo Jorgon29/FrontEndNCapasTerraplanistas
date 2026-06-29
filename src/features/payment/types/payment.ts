@@ -32,7 +32,6 @@ export interface PaymentInfo {
 
 export interface CreateTransactionRequest {
   appointmentInfo: {
-    googleEventId: string;
     status: string;
     finalFeePerHour: number;
     score: null;
@@ -56,7 +55,6 @@ export interface TransactionResponse {
 
 export interface AppointmentResponse {
   id: string;
-  googleEventId: string;
   status: AppointmentStatus;
   finalFeePerHour: number;
   score: number | null;
@@ -65,6 +63,12 @@ export interface AppointmentResponse {
   expectedAt: string;
   employeeId: string;
   patientId: string;
+  patientCallerUserId?: string;
+  eventInfo?: {
+    meetLink?: string;
+  };
+  doctor_name?: string;
+  patient_name?: string;
 }
 
 export type AppointmentStatus =

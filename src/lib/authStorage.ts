@@ -12,6 +12,9 @@ export interface AuthUser {
   account_status: string;
   requires_action?: string;
   pendingUserConfigId?: string;
+  features?: {
+    stripeEnabled: boolean;
+  };
 }
 
 export const authStorage = {

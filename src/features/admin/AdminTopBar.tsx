@@ -83,6 +83,30 @@ function AdminTopBar() {
                         Especialidades
                     </Link>
 
+                    <Link
+                        to="/admin/laboratories"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Laboratorios
+                    </Link>
+
+                    <Link
+                        to="/admin/medicines"
+                        className="
+                            font-medium
+                            text-text-muted
+                            hover:text-primary
+                            transition-colors
+                        "
+                    >
+                        Medicamentos
+                    </Link>
+
                     <button
                         className="
                             rounded-lg px-4 py-2
@@ -156,8 +180,8 @@ function AdminTopBar() {
                             Inicio
                         </Link>
 
-                        <Link
-                            to="/admin/search"
+<Link
+                            to="/admin/specialties"
                             className="
                                 rounded-lg px-4 py-3
                                 text-text
@@ -165,7 +189,31 @@ function AdminTopBar() {
                                 transition
                             "
                         >
-                            Buscador
+                            Especialidades
+                        </Link>
+
+                        <Link
+                            to="/admin/laboratories"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                            "
+                        >
+                            Laboratorios
+                        </Link>
+
+                        <Link
+                            to="/admin/medicines"
+                            className="
+                                rounded-lg px-4 py-3
+                                text-text
+                                hover:bg-surface-alt
+                                transition
+                            "
+                        >
+                            Medicamentos
                         </Link>
 
                         <button

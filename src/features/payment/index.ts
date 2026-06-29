@@ -7,6 +7,9 @@ export {
   useCancelAppointment,
   useDeleteAppointment,
   useConfirmPayment,
+  useConfirmCheckoutSession,
+  useSimulateConfirmPayment,
+  usePendingAppointments,
 } from "./hooks/usePayment";
 export type {
   PaymentIntentResponse,

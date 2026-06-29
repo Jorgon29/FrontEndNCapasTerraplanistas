@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   PaymentElement,
   useStripe,
@@ -24,6 +24,13 @@ export function PaymentForm({
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (elements && !isReady) {
+      setIsReady(true);
+    }
+  }, [elements, isReady]);
 
   const formattedAmount = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -33,7 +40,7 @@ export function PaymentForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !isReady) {
       return;
     }
 
@@ -58,6 +65,15 @@ export function PaymentForm({
       setIsProcessing(false);
     }
   };
+
+  if (!isReady) {
+    return (
+      <div className="flex flex-col gap-4 items-center justify-center py-8">
+        <FontAwesomeIcon icon={faSpinner} spin className="text-3xl text-primary" />
+        <p className="text-text-muted text-sm">Cargando método de pago...</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -91,7 +107,7 @@ export function PaymentForm({
         </button>
         <button
           type="submit"
-          disabled={!stripe || isProcessing}
+          disabled={!stripe || !isReady || isProcessing}
           className="flex-1 bg-primary text-white rounded-xl py-3 text-sm font-semibold hover:bg-primary-dark transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {isProcessing ? (

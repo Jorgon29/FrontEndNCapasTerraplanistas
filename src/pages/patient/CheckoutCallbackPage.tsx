@@ -1,23 +1,23 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router";
+import { useParams, useSearchParams, useNavigate } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
-import { useAppointment, useConfirmCheckoutSession } from "@/features/payment";
+import { faSpinner, faCheck, faX } from "@fortawesome/react-fontawesome";
+import { faCheck as faCheckSolid } from "@fortawesome/free-solid-svg-icons";
+import { useConfirmCheckoutSession } from "@/features/payment";
 
-function CheckoutPage() {
+function CheckoutCallbackPage() {
   const { appointmentId } = useParams<{ appointmentId: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { data: appointment, isLoading, error } = useAppointment(appointmentId || null);
   const confirmCheckoutSession = useConfirmCheckoutSession();
 
   const [paymentStatus, setPaymentStatus] = useState<'loading' | 'success' | 'failed' | 'cancelled' | 'pending'>('pending');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const sessionId = params.get('session_id');
-    const redirectStatus = params.get('redirect_status');
+    const sessionId = searchParams.get('session_id');
+    const redirectStatus = searchParams.get('redirect_status');
 
     if (redirectStatus === 'succeeded' && sessionId) {
       setPaymentStatus('loading');
@@ -44,7 +44,7 @@ function CheckoutPage() {
     }).format(amount);
   };
 
-  if (isLoading || paymentStatus === 'loading') {
+  if (paymentStatus === 'loading') {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -64,14 +64,6 @@ function CheckoutPage() {
           </div>
           <h1 className="text-2xl font-bold text-text mb-2">¡Pago Exitoso!</h1>
           <p className="text-text-muted mb-6">Tu cita ha sido confirmada.</p>
-          <div className="bg-surface-alt rounded-xl p-4 mb-6">
-            <p className="text-sm text-text-muted">Dr. {appointment?.doctor_name || "Doctor"}</p>
-            {appointment?.finalFeePerHour && (
-              <p className="text-lg font-bold text-primary mt-1">
-                {formatCurrency(appointment.finalFeePerHour)}
-              </p>
-            )}
-          </div>
           <div className="flex flex-col gap-3">
             <button
               onClick={() => navigate("/patient/calendar")}
@@ -128,20 +120,14 @@ function CheckoutPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="bg-surface rounded-2xl p-8 max-w-md w-full shadow-xl border border-surface-alt text-center">
-        <h1 className="text-xl font-semibold text-text mb-4">Redirigiendo a Stripe...</h1>
+        <h1 className="text-xl font-semibold text-text mb-4">Esperando confirmación...</h1>
         <FontAwesomeIcon icon={faSpinner} spin className="text-3xl text-primary mb-4" />
         <p className="text-text-muted text-sm">
-          Si no eres redirigido automáticamente, haz clic en el botón abaixo.
+          Si no eres redirigido automáticamente, contacta a soporte.
         </p>
-        <Link
-          to="/patient/cart"
-          className="inline-block mt-4 text-primary hover:underline"
-        >
-          Volver al Carrito
-        </Link>
       </div>
     </div>
   );
 }
 
-export default CheckoutPage;
+export default CheckoutCallbackPage;
