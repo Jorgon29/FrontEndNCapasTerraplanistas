@@ -4,22 +4,39 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot src/index.ts",
-    "start": "NODE_ENV=production bun src/index.ts",
+    "dev": "bun src/index.html",
     "build": "bun run build.ts"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.0",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-regular-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.1",
+    "@hookform/resolvers": "^5.4.0",
+    "@stripe/react-stripe-js": "^6.6.0",
+    "@stripe/stripe-js": "^9.8.0",
+    "axios": "^1.18.0",
     "bun-plugin-tailwind": "^0.1.2",
+    "date-fns": "^4.3.0",
+    "framer-motion": "^12.40.0",
+    "lucide-react": "^1.16.0",
     "react": "^19",
+    "react-big-calendar": "^1.19.4",
     "react-dom": "^19",
+    "react-hook-form": "^7.76.1",
     "react-query": "^3.39.3",
     "react-router": "^7.15.0",
     "react-router-dom": "^7.15.0",
-    "tailwindcss": "^4.1.11"
+    "tailwindcss": "^4.3.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bun": "^1.3.13",
     "@types/react": "^19",
+    "@types/react-big-calendar": "^1.16.3",
     "@types/react-dom": "^19",
-    "@types/bun": "latest"
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.14"
   }
 }
